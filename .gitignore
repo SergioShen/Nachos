@@ -1,0 +1,13 @@
+code/*/*.o
+code/*/nachos
+
+code/bin/coff2noff
+code/bin/halt
+
+code/test/*.coff
+code/test/halt
+code/test/matmult
+code/test/shell
+code/test/sort
+
+nachos.ps
