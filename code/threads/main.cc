@@ -63,6 +63,7 @@ extern void ThreadTest(void), Copy(char *unixFile, char *nachosFile);
 extern void Print(char *file), PerformanceTest(void);
 extern void StartProcess(char *file), ConsoleTest(char *in, char *out);
 extern void MailTest(int networkID);
+extern void PrintHello();
 
 //----------------------------------------------------------------------
 // main
@@ -85,10 +86,13 @@ main(int argc, char **argv)
 					// for a particular command
 
     DEBUG('t', "Entering main");
-    (void) Initialize(argc, argv);
-    
+	(void) Initialize(argc, argv);
+	
 #ifdef THREADS
-    for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
+
+PrintHello();
+
+for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
       argCount = 1;
       switch (argv[0][1]) {
       case 'q':
