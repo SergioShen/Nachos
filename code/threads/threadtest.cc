@@ -63,6 +63,17 @@ void ThreadTest2() {
     printThreadStatus();
 }
 
+void ThreadTest3() {
+    DEBUG('t', "Entering ThreadTest150\n");
+    for(int i = 1; i < 150; i++) {
+        Thread *t = new Thread("test thread");
+        t->Fork(SimpleThread, i);
+    }
+    SimpleThread(0);
+    printThreadStatus();
+}
+
+
 //----------------------------------------------------------------------
 // ThreadTest
 // 	Invoke a test routine.
@@ -77,6 +88,9 @@ ThreadTest()
     break;
     case 2:
     ThreadTest2();
+    break;
+    case 3:
+    ThreadTest3();
     break;
     default:
 	printf("No test specified.\n");
