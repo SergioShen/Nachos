@@ -1,0 +1,1652 @@
+Creating thread: NAME: main, UID: 1001, TID: 0
+1 threads in total
+	interrupts: off -> on
+
+== Tick 10 ==
+	interrupts: on -> off
+Time: 10, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Entering ThreadTest150
+Creating thread: NAME: test thread, UID: 1001, TID: 1
+2 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 1
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 20 ==
+	interrupts: on -> off
+Time: 20, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 2
+3 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 2
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 30 ==
+	interrupts: on -> off
+Time: 30, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 3
+4 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 3
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 40 ==
+	interrupts: on -> off
+Time: 40, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 4
+5 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 4
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 50 ==
+	interrupts: on -> off
+Time: 50, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 5
+6 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 5
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 60 ==
+	interrupts: on -> off
+Time: 60, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 6
+7 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 6
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 70 ==
+	interrupts: on -> off
+Time: 70, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 7
+8 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 7
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 80 ==
+	interrupts: on -> off
+Time: 80, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 8
+9 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 8
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 90 ==
+	interrupts: on -> off
+Time: 90, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 9
+10 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 9
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 100 ==
+	interrupts: on -> off
+Time: 100, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 10
+11 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 10
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 110 ==
+	interrupts: on -> off
+Time: 110, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 11
+12 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 11
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 120 ==
+	interrupts: on -> off
+Time: 120, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 12
+13 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 12
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 130 ==
+	interrupts: on -> off
+Time: 130, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 13
+14 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 13
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 140 ==
+	interrupts: on -> off
+Time: 140, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 14
+15 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 14
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 150 ==
+	interrupts: on -> off
+Time: 150, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 15
+16 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 15
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 160 ==
+	interrupts: on -> off
+Time: 160, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 16
+17 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 16
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 170 ==
+	interrupts: on -> off
+Time: 170, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 17
+18 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 17
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 180 ==
+	interrupts: on -> off
+Time: 180, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 18
+19 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 18
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 190 ==
+	interrupts: on -> off
+Time: 190, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 19
+20 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 19
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 200 ==
+	interrupts: on -> off
+Time: 200, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 20
+21 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 20
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 210 ==
+	interrupts: on -> off
+Time: 210, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 21
+22 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 21
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 220 ==
+	interrupts: on -> off
+Time: 220, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 22
+23 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 22
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 230 ==
+	interrupts: on -> off
+Time: 230, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 23
+24 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 23
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 240 ==
+	interrupts: on -> off
+Time: 240, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 24
+25 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 24
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 250 ==
+	interrupts: on -> off
+Time: 250, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 25
+26 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 25
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 260 ==
+	interrupts: on -> off
+Time: 260, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 26
+27 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 26
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 270 ==
+	interrupts: on -> off
+Time: 270, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 27
+28 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 27
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 280 ==
+	interrupts: on -> off
+Time: 280, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 28
+29 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 28
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 290 ==
+	interrupts: on -> off
+Time: 290, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 29
+30 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 29
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 300 ==
+	interrupts: on -> off
+Time: 300, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 30
+31 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 30
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 310 ==
+	interrupts: on -> off
+Time: 310, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 31
+32 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 31
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 320 ==
+	interrupts: on -> off
+Time: 320, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 32
+33 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 32
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 330 ==
+	interrupts: on -> off
+Time: 330, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 33
+34 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 33
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 340 ==
+	interrupts: on -> off
+Time: 340, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 34
+35 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 34
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 350 ==
+	interrupts: on -> off
+Time: 350, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 35
+36 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 35
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 360 ==
+	interrupts: on -> off
+Time: 360, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 36
+37 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 36
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 370 ==
+	interrupts: on -> off
+Time: 370, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 37
+38 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 37
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 380 ==
+	interrupts: on -> off
+Time: 380, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 38
+39 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 38
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 390 ==
+	interrupts: on -> off
+Time: 390, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 39
+40 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 39
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 400 ==
+	interrupts: on -> off
+Time: 400, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 40
+41 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 40
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 410 ==
+	interrupts: on -> off
+Time: 410, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 41
+42 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 41
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 420 ==
+	interrupts: on -> off
+Time: 420, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 42
+43 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 42
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 430 ==
+	interrupts: on -> off
+Time: 430, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 43
+44 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 43
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 440 ==
+	interrupts: on -> off
+Time: 440, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 44
+45 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 44
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 450 ==
+	interrupts: on -> off
+Time: 450, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 45
+46 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 45
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 460 ==
+	interrupts: on -> off
+Time: 460, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 46
+47 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 46
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 470 ==
+	interrupts: on -> off
+Time: 470, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 47
+48 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 47
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 480 ==
+	interrupts: on -> off
+Time: 480, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 48
+49 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 48
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 490 ==
+	interrupts: on -> off
+Time: 490, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 49
+50 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 49
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 500 ==
+	interrupts: on -> off
+Time: 500, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 50
+51 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 50
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 510 ==
+	interrupts: on -> off
+Time: 510, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 51
+52 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 51
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 520 ==
+	interrupts: on -> off
+Time: 520, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 52
+53 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 52
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 530 ==
+	interrupts: on -> off
+Time: 530, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 53
+54 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 53
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 540 ==
+	interrupts: on -> off
+Time: 540, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 54
+55 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 54
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 550 ==
+	interrupts: on -> off
+Time: 550, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 55
+56 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 55
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 560 ==
+	interrupts: on -> off
+Time: 560, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 56
+57 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 56
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 570 ==
+	interrupts: on -> off
+Time: 570, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 57
+58 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 57
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 580 ==
+	interrupts: on -> off
+Time: 580, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 58
+59 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 58
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 590 ==
+	interrupts: on -> off
+Time: 590, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 59
+60 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 59
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 600 ==
+	interrupts: on -> off
+Time: 600, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 60
+61 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 60
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 610 ==
+	interrupts: on -> off
+Time: 610, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 61
+62 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 61
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 620 ==
+	interrupts: on -> off
+Time: 620, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 62
+63 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 62
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 630 ==
+	interrupts: on -> off
+Time: 630, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 63
+64 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 63
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 640 ==
+	interrupts: on -> off
+Time: 640, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 64
+65 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 64
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 650 ==
+	interrupts: on -> off
+Time: 650, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 65
+66 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 65
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 660 ==
+	interrupts: on -> off
+Time: 660, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 66
+67 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 66
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 670 ==
+	interrupts: on -> off
+Time: 670, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 67
+68 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 67
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 680 ==
+	interrupts: on -> off
+Time: 680, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 68
+69 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 68
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 690 ==
+	interrupts: on -> off
+Time: 690, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 69
+70 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 69
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 700 ==
+	interrupts: on -> off
+Time: 700, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 70
+71 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 70
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 710 ==
+	interrupts: on -> off
+Time: 710, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 71
+72 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 71
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 720 ==
+	interrupts: on -> off
+Time: 720, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 72
+73 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 72
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 730 ==
+	interrupts: on -> off
+Time: 730, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 73
+74 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 73
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 740 ==
+	interrupts: on -> off
+Time: 740, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 74
+75 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 74
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 750 ==
+	interrupts: on -> off
+Time: 750, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 75
+76 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 75
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 760 ==
+	interrupts: on -> off
+Time: 760, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 76
+77 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 76
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 770 ==
+	interrupts: on -> off
+Time: 770, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 77
+78 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 77
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 780 ==
+	interrupts: on -> off
+Time: 780, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 78
+79 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 78
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 790 ==
+	interrupts: on -> off
+Time: 790, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 79
+80 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 79
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 800 ==
+	interrupts: on -> off
+Time: 800, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 80
+81 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 80
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 810 ==
+	interrupts: on -> off
+Time: 810, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 81
+82 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 81
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 820 ==
+	interrupts: on -> off
+Time: 820, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 82
+83 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 82
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 830 ==
+	interrupts: on -> off
+Time: 830, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 83
+84 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 83
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 840 ==
+	interrupts: on -> off
+Time: 840, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 84
+85 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 84
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 850 ==
+	interrupts: on -> off
+Time: 850, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 85
+86 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 85
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 860 ==
+	interrupts: on -> off
+Time: 860, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 86
+87 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 86
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 870 ==
+	interrupts: on -> off
+Time: 870, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 87
+88 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 87
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 880 ==
+	interrupts: on -> off
+Time: 880, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 88
+89 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 88
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 890 ==
+	interrupts: on -> off
+Time: 890, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 89
+90 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 89
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 900 ==
+	interrupts: on -> off
+Time: 900, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 90
+91 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 90
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 910 ==
+	interrupts: on -> off
+Time: 910, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 91
+92 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 91
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 920 ==
+	interrupts: on -> off
+Time: 920, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 92
+93 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 92
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 930 ==
+	interrupts: on -> off
+Time: 930, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 93
+94 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 93
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 940 ==
+	interrupts: on -> off
+Time: 940, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 94
+95 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 94
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 950 ==
+	interrupts: on -> off
+Time: 950, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 95
+96 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 95
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 960 ==
+	interrupts: on -> off
+Time: 960, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 96
+97 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 96
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 970 ==
+	interrupts: on -> off
+Time: 970, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 97
+98 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 97
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 980 ==
+	interrupts: on -> off
+Time: 980, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 98
+99 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 98
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 990 ==
+	interrupts: on -> off
+Time: 990, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 99
+100 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 99
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1000 ==
+	interrupts: on -> off
+Time: 1000, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 100
+101 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 100
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1010 ==
+	interrupts: on -> off
+Time: 1010, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 101
+102 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 101
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1020 ==
+	interrupts: on -> off
+Time: 1020, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 102
+103 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 102
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1030 ==
+	interrupts: on -> off
+Time: 1030, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 103
+104 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 103
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1040 ==
+	interrupts: on -> off
+Time: 1040, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 104
+105 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 104
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1050 ==
+	interrupts: on -> off
+Time: 1050, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 105
+106 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 105
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1060 ==
+	interrupts: on -> off
+Time: 1060, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 106
+107 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 106
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1070 ==
+	interrupts: on -> off
+Time: 1070, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 107
+108 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 107
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1080 ==
+	interrupts: on -> off
+Time: 1080, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 108
+109 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 108
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1090 ==
+	interrupts: on -> off
+Time: 1090, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 109
+110 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 109
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1100 ==
+	interrupts: on -> off
+Time: 1100, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 110
+111 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 110
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1110 ==
+	interrupts: on -> off
+Time: 1110, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 111
+112 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 111
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1120 ==
+	interrupts: on -> off
+Time: 1120, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 112
+113 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 112
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1130 ==
+	interrupts: on -> off
+Time: 1130, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 113
+114 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 113
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1140 ==
+	interrupts: on -> off
+Time: 1140, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 114
+115 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 114
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1150 ==
+	interrupts: on -> off
+Time: 1150, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 115
+116 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 115
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1160 ==
+	interrupts: on -> off
+Time: 1160, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 116
+117 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 116
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1170 ==
+	interrupts: on -> off
+Time: 1170, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 117
+118 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 117
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1180 ==
+	interrupts: on -> off
+Time: 1180, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 118
+119 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 118
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1190 ==
+	interrupts: on -> off
+Time: 1190, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 119
+120 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 119
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1200 ==
+	interrupts: on -> off
+Time: 1200, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 120
+121 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 120
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1210 ==
+	interrupts: on -> off
+Time: 1210, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 121
+122 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 121
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1220 ==
+	interrupts: on -> off
+Time: 1220, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 122
+123 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 122
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1230 ==
+	interrupts: on -> off
+Time: 1230, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 123
+124 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 123
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1240 ==
+	interrupts: on -> off
+Time: 1240, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 124
+125 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 124
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1250 ==
+	interrupts: on -> off
+Time: 1250, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 125
+126 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 125
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1260 ==
+	interrupts: on -> off
+Time: 1260, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 126
+127 threads in total
+Forking thread "test thread" with func = 0x8049ff7, arg = 126
+	interrupts: on -> off
+Putting thread test thread on ready list.
+	interrupts: off -> on
+
+== Tick 1270 ==
+	interrupts: on -> off
+Time: 1270, interrupts off
+Pending interrupts:
+End of pending interrupts
+	interrupts: off -> on
+Creating thread: NAME: test thread, UID: 1001, TID: 127
+128 threads in total
+Trying to create too many threads.

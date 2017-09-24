@@ -54,7 +54,7 @@ ThreadTest1()
 
 void ThreadTest150() {
     DEBUG('t', "Entering ThreadTest150\n");
-    for(int i = 1; i < 150; i++) {
+    for(int i = 1; i <= 127; i++) {
         Thread *t = new Thread("test thread");
         t->Fork(SimpleThread, i);
     }

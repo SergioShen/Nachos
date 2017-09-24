@@ -39,6 +39,11 @@ int Thread::totalNumber(0);
 
 Thread::Thread(char* threadName)
 {
+    if(totalNumber >= 128) {
+        printf("Trying to create too many threads.\n");
+        ASSERT(totalNumber < 128);
+    }
+
     name = threadName;
     stackTop = NULL;
     stack = NULL;
@@ -51,10 +56,6 @@ Thread::Thread(char* threadName)
     totalNumber++;
     DEBUG('t', "%d threads in total\n", totalNumber);
 
-    if(totalNumber >= 128) {
-        printf("Trying to create too many threads.\n");
-        ASSERT(totalNumber < 128);
-    }
 #ifdef USER_PROGRAM
     space = NULL;
 #endif
