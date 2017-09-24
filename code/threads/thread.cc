@@ -22,7 +22,10 @@
 
 #define STACK_FENCEPOST 0xdeadbeef	// this is put at the top of the
 					// execution stack, for detecting 
-					// stack overflows
+                    // stack overflows
+                    
+//----------------------------------------------------------------------
+int Thread::nextThreadID(0);
 
 //----------------------------------------------------------------------
 // Thread::Thread
@@ -38,6 +41,10 @@ Thread::Thread(char* threadName)
     stackTop = NULL;
     stack = NULL;
     status = JUST_CREATED;
+    userID = 1001;
+    threadID = nextThreadID;
+    nextThreadID++;
+    DEBUG('t', "Creating thread: NAME: %s, UID: %d, TID: %d\n", name, userID, threadID);
 #ifdef USER_PROGRAM
     space = NULL;
 #endif
