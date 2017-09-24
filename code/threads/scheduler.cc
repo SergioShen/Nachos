@@ -145,3 +145,12 @@ Scheduler::Print()
     printf("Ready list contents:\n");
     readyList->Mapcar((VoidFunctionPtr) ThreadPrint);
 }
+
+void Scheduler::printTSInfo() {
+    ListElement *nextToPrint = readyList->getFirst();
+    while(nextToPrint != NULL) {
+        Thread *threadToPrint = (Thread*)nextToPrint->item;
+        threadToPrint->printTSInfo();
+        nextToPrint = nextToPrint->next;
+    }
+}

@@ -64,6 +64,20 @@ TimerInterruptHandler(int dummy)
 	interrupt->YieldOnReturn();
 }
 
+void printThreadStatus() {
+    printf("\n");
+    printf("%6s %6s %-20s %-8s\n", "TID", "UID", "NAME", "STATUS");
+    DEBUG('t', "Print current thread status\n");
+    if(currentThread != NULL)
+        currentThread->printTSInfo();
+    DEBUG('t', "Print pending threads status\n");
+    scheduler->printTSInfo();
+    DEBUG('t', "Print to be destroyed thread status\n");
+    if(threadToBeDestroyed != NULL)
+        threadToBeDestroyed->printTSInfo();
+    printf("\n");
+}
+
 //----------------------------------------------------------------------
 // Initialize
 // 	Initialize Nachos global data structures.  Interpret command

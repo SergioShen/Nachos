@@ -102,6 +102,11 @@ class Thread {
     char* getName() { return (name); }
     void Print() { printf("%s, ", name); }
 
+    void printTSInfo() {
+      const char *statusToString[] { "JUST_CREATED", "RUNNING", "READY", "BLOCKED" };      
+      printf("%4d %6d %-16s %-8s\n", threadID, userID, name, statusToString[status]);      
+    }
+
   private:
     // some of the private data for this class is listed above
     

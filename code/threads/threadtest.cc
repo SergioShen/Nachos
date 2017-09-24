@@ -50,6 +50,7 @@ ThreadTest1()
 
     t->Fork(SimpleThread, 1);
     SimpleThread(0);
+    printThreadStatus();
 }
 
 void ThreadTest2() {
@@ -59,6 +60,7 @@ void ThreadTest2() {
         t->Fork(SimpleThread, i);
     }
     SimpleThread(0);
+    printThreadStatus();
 }
 
 //----------------------------------------------------------------------
