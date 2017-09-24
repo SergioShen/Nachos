@@ -17,7 +17,7 @@ Scheduler *scheduler;			// the ready list
 Interrupt *interrupt;			// interrupt status
 Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
-					// for invoking context switches
+                    // for invoking context switches
 
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
