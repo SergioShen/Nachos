@@ -66,7 +66,7 @@ TimerInterruptHandler(int dummy)
 
 void printThreadStatus() {
     printf("\n");
-    printf("%6s %6s %-20s %-8s\n", "TID", "UID", "NAME", "STATUS");
+    printf("%4s %6s %-16s %-8s\n", "TID", "UID", "NAME", "STATUS");
     DEBUG('t', "Print current thread status\n");
     if(currentThread != NULL)
         currentThread->printTSInfo();
