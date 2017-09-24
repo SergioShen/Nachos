@@ -115,6 +115,8 @@ class Thread {
     int threadID;
     static int nextThreadID;
 
+    static int totalNumber;
+
     void StackAllocate(VoidFunctionPtr func, int arg);
     					// Allocate a stack for thread.
 					// Used internally by Fork()

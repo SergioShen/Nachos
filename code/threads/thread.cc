@@ -26,6 +26,8 @@
                     
 //----------------------------------------------------------------------
 int Thread::nextThreadID(0);
+int Thread::totalNumber(0);
+
 
 //----------------------------------------------------------------------
 // Thread::Thread
@@ -45,6 +47,14 @@ Thread::Thread(char* threadName)
     threadID = nextThreadID;
     nextThreadID++;
     DEBUG('t', "Creating thread: NAME: %s, UID: %d, TID: %d\n", name, userID, threadID);
+
+    totalNumber++;
+    DEBUG('t', "%d threads in total\n", totalNumber);
+
+    if(totalNumber >= 128) {
+        printf("Trying to create too many threads.\n");
+        ASSERT(totalNumber < 128);
+    }
 #ifdef USER_PROGRAM
     space = NULL;
 #endif
@@ -65,6 +75,8 @@ Thread::Thread(char* threadName)
 Thread::~Thread()
 {
     DEBUG('t', "Deleting thread \"%s\"\n", name);
+
+    totalNumber--;
 
     ASSERT(this != currentThread);
     if (stack != NULL)
