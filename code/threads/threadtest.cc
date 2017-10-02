@@ -35,6 +35,20 @@ SimpleThread(int which)
     }
 }
 
+void
+SimpleThreadWithPriority(int prior)
+{
+    int num;
+    
+    for (num = 0; num < 3; num++) {
+        printf("*** thread looped %d times, priority: %d, %s\n", num, prior, currentThread->getName());
+        if(num == 1 && prior == 7) {
+            Thread *t = new Thread("deep thread", 6);
+            t->Fork(SimpleThreadWithPriority, 6);
+        }
+    }
+}
+
 //----------------------------------------------------------------------
 // ThreadTest1
 // 	Set up a ping-pong between two threads, by forking a thread 
@@ -54,7 +68,7 @@ ThreadTest1()
 }
 
 void ThreadTest2() {
-    DEBUG('t', "Entering ThreadTest150\n");
+    DEBUG('t', "Entering ThreadTest128\n");
     for(int i = 1; i < 128; i++) {
         Thread *t = new Thread("test thread");
         t->Fork(SimpleThread, i);
@@ -71,6 +85,16 @@ void ThreadTest3() {
     }
     SimpleThread(0);
     printThreadStatus();
+}
+
+void ThreadTest4() {
+    DEBUG('t', "Entering ThreadTestPriority\n");
+    int priors[8] = { 4, 2, 9, 12, 0, 15, 7, 13 };
+    for(int i = 0; i < 8; i++) {
+        Thread *t = new Thread("test thread", priors[i]);
+        t->Fork(SimpleThreadWithPriority, priors[i]);
+    }
+    SimpleThreadWithPriority(8);
 }
 
 
@@ -91,6 +115,9 @@ ThreadTest()
     break;
     case 3:
     ThreadTest3();
+    break;
+    case 4:
+    ThreadTest4();
     break;
     default:
 	printf("No test specified.\n");

@@ -81,7 +81,7 @@ class Thread {
     int machineState[MachineStateSize];  // all registers except for stackTop
 
   public:
-    Thread(char* debugName);		// initialize a Thread 
+    Thread(char* debugName, int prior = 8);		// initialize a Thread 
     ~Thread(); 				// deallocate a Thread
 					// NOTE -- thread being deleted
 					// must not be running when delete 
@@ -104,8 +104,13 @@ class Thread {
 
     void printTSInfo() {
       const char *statusToString[] { "JUST_CREATED", "RUNNING", "READY", "BLOCKED" };      
-      printf("%4d %6d %-16s %-8s\n", threadID, userID, name, statusToString[status]);      
+      printf("%4d %6d %4d %-16s %-8s\n", threadID, userID, priority, name, statusToString[status]);      
     }
+    void setPriority(int p) {
+      ASSERT(p >= 0 && p < 16);
+      priority = p;
+    }
+    int getPriority() { return priority; }
 
   private:
     // some of the private data for this class is listed above
@@ -118,6 +123,7 @@ class Thread {
 
     int userID;
     int threadID;
+    int priority;    // priority of the thread, valued in [0, 15]
     static int nextThreadID;
 
     static int totalNumber;
