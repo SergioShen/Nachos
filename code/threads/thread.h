@@ -102,6 +102,11 @@ class Thread {
     char* getName() { return (name); }
     void Print() { printf("%s, ", name); }
 
+    void printTSInfo() {
+      const char *statusToString[] { "JUST_CREATED", "RUNNING", "READY", "BLOCKED" };      
+      printf("%4d %6d %-16s %-8s\n", threadID, userID, name, statusToString[status]);      
+    }
+
   private:
     // some of the private data for this class is listed above
     
@@ -110,6 +115,12 @@ class Thread {
 					// (If NULL, don't deallocate stack)
     ThreadStatus status;		// ready, running or blocked
     char* name;
+
+    int userID;
+    int threadID;
+    static int nextThreadID;
+
+    static int totalNumber;
 
     void StackAllocate(VoidFunctionPtr func, int arg);
     					// Allocate a stack for thread.

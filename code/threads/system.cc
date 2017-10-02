@@ -17,7 +17,7 @@ Scheduler *scheduler;			// the ready list
 Interrupt *interrupt;			// interrupt status
 Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
-					// for invoking context switches
+                    // for invoking context switches
 
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;
@@ -62,6 +62,20 @@ TimerInterruptHandler(int dummy)
 {
     if (interrupt->getStatus() != IdleMode)
 	interrupt->YieldOnReturn();
+}
+
+void printThreadStatus() {
+    printf("\n");
+    printf("%4s %6s %-16s %-8s\n", "TID", "UID", "NAME", "STATUS");
+    DEBUG('t', "Print current thread status\n");
+    if(currentThread != NULL)
+        currentThread->printTSInfo();
+    DEBUG('t', "Print pending threads status\n");
+    scheduler->printTSInfo();
+    DEBUG('t', "Print to be destroyed thread status\n");
+    if(threadToBeDestroyed != NULL)
+        threadToBeDestroyed->printTSInfo();
+    printf("\n");
 }
 
 //----------------------------------------------------------------------
