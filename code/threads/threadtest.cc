@@ -42,10 +42,18 @@ SimpleThreadWithPriority(int prior)
     
     for (num = 0; num < 3; num++) {
         printf("*** thread looped %d times, priority: %d, %s\n", num, prior, currentThread->getName());
-        if(num == 1 && prior == 7) {
-            Thread *t = new Thread("deep thread", 6);
-            t->Fork(SimpleThreadWithPriority, 6);
-        }
+    }
+}
+
+void
+SimpleThreadTimeSlice(int prior)
+{
+    int num;
+    
+    for (num = 0; num < 80; num++) {
+        printf("*** thread looped %d times, priority: %d, %s\n", num, prior, currentThread->getName());
+        interrupt->SetLevel(IntOff);
+        interrupt->SetLevel(IntOn);
     }
 }
 
@@ -97,6 +105,17 @@ void ThreadTest4() {
     SimpleThreadWithPriority(8);
 }
 
+void ThreadTest5() {
+    DEBUG('t', "Entering ThreadTestTimeSlice\n");
+    int priors[4] = { 5, 2, 11, 14 };
+    char* names[4] = { "forked 1", "forked 2", "forked 3", "forked 4" };
+    for(int i = 0; i < 4; i++) {
+        Thread *t = new Thread(names[i], priors[i]);
+        t->Fork(SimpleThreadTimeSlice, priors[i]);
+    }
+    SimpleThreadTimeSlice(8);
+}
+
 
 //----------------------------------------------------------------------
 // ThreadTest
@@ -118,6 +137,9 @@ ThreadTest()
     break;
     case 4:
     ThreadTest4();
+    break;
+    case 5:
+    ThreadTest5();
     break;
     default:
 	printf("No test specified.\n");

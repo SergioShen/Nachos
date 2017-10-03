@@ -52,6 +52,8 @@ Thread::Thread(char* threadName, int prior)
     threadID = nextThreadID;
     nextThreadID++;
     priority = prior;
+    timeSliceNum = 0;
+    dynamicPrior = priority;
     DEBUG('t', "Creating thread: NAME: %s, UID: %d, TID: %d\n", name, userID, threadID);
 
     totalNumber++;

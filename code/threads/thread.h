@@ -111,6 +111,10 @@ class Thread {
       priority = p;
     }
     int getPriority() { return priority; }
+    int getDynamicPriority() { return dynamicPrior; }
+    void IncreaseTimeSliceNum() { timeSliceNum++; }
+    int getTimeSliceNum() { return timeSliceNum; }
+    void UpdateDynamicPriority() { dynamicPrior = priority*(1 + timeSliceNum); }
 
   private:
     // some of the private data for this class is listed above
@@ -124,6 +128,8 @@ class Thread {
     int userID;
     int threadID;
     int priority;    // priority of the thread, valued in [0, 15]
+    int timeSliceNum;    // Number of used time slices
+    int dynamicPrior;    // dynamic priority
     static int nextThreadID;
 
     static int totalNumber;

@@ -56,7 +56,7 @@ Scheduler::ReadyToRun (Thread *thread)
     DEBUG('t', "Putting thread %s on ready list.\n", thread->getName());
 
     thread->setStatus(READY);
-    readyList->SortedInsert((void *)thread, thread->getPriority());
+    readyList->SortedInsert((void *)thread, thread->getDynamicPriority());
 }
 
 //----------------------------------------------------------------------
@@ -153,4 +153,12 @@ void Scheduler::printTSInfo() {
         threadToPrint->printTSInfo();
         nextToPrint = nextToPrint->next;
     }
+}
+
+Thread* Scheduler::getFirst() {
+    ListElement *first = readyList->getFirst();
+    if(first == NULL)
+        return NULL;
+    else
+        return (Thread*)first->item;
 }
