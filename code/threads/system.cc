@@ -60,9 +60,9 @@ extern void Cleanup();
 static void
 TimerInterruptHandler(int dummy)
 {
+    DEBUG('t', "Time interrupt! Name: %-8s, PR: %4d, TS: %4d, DP: %4d\n", currentThread->getName(),currentThread->getPriority(), currentThread->getTimeSliceNum(), currentThread->getDynamicPriority());
     currentThread->IncreaseTimeSliceNum();
     currentThread->UpdateDynamicPriority();
-    DEBUG('t', "Time interrupt! Name: %-8s, PR: %4d, TS: %4d, DP: %4d\n", currentThread->getName(),currentThread->getPriority(), currentThread->getTimeSliceNum(), currentThread->getDynamicPriority());
     if (interrupt->getStatus() != IdleMode) {
         Thread* pendingThread = scheduler->getFirst();
         if(pendingThread != NULL && pendingThread->getDynamicPriority() < currentThread->getDynamicPriority())

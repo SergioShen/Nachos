@@ -107,9 +107,9 @@ void ThreadTest4() {
 
 void ThreadTest5() {
     DEBUG('t', "Entering ThreadTestTimeSlice\n");
-    int priors[4] = { 5, 2, 11, 14 };
-    char* names[4] = { "forked 1", "forked 2", "forked 3", "forked 4" };
-    for(int i = 0; i < 4; i++) {
+    int priors[5] = { 0, 5, 2, 11, 14 };
+    char* names[5] = { "forked 0", "forked 1", "forked 2", "forked 3", "forked 4" };
+    for(int i = 0; i < 5; i++) {
         Thread *t = new Thread(names[i], priors[i]);
         t->Fork(SimpleThreadTimeSlice, priors[i]);
     }
