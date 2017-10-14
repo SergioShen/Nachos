@@ -35,6 +35,28 @@ SimpleThread(int which)
     }
 }
 
+void
+SimpleThreadWithPriority(int prior)
+{
+    int num;
+    
+    for (num = 0; num < 3; num++) {
+        printf("*** thread looped %d times, priority: %d, %s\n", num, prior, currentThread->getName());
+    }
+}
+
+void
+SimpleThreadTimeSlice(int prior)
+{
+    int num;
+    
+    for (num = 0; num < 80; num++) {
+        printf("*** thread looped %d times, priority: %d, %s\n", num, prior, currentThread->getName());
+        interrupt->SetLevel(IntOff);
+        interrupt->SetLevel(IntOn);
+    }
+}
+
 //----------------------------------------------------------------------
 // ThreadTest1
 // 	Set up a ping-pong between two threads, by forking a thread 
@@ -44,13 +66,56 @@ SimpleThread(int which)
 void
 ThreadTest1()
 {
-    DEBUG('t', "Entering ThreadTest1");
+    DEBUG('t', "Entering ThreadTest1\n");
 
     Thread *t = new Thread("forked thread");
 
     t->Fork(SimpleThread, 1);
     SimpleThread(0);
+    printThreadStatus();
 }
+
+void ThreadTest2() {
+    DEBUG('t', "Entering ThreadTest128\n");
+    for(int i = 1; i < 128; i++) {
+        Thread *t = new Thread("test thread");
+        t->Fork(SimpleThread, i);
+    }
+    SimpleThread(0);
+    printThreadStatus();
+}
+
+void ThreadTest3() {
+    DEBUG('t', "Entering ThreadTest150\n");
+    for(int i = 1; i < 150; i++) {
+        Thread *t = new Thread("test thread");
+        t->Fork(SimpleThread, i);
+    }
+    SimpleThread(0);
+    printThreadStatus();
+}
+
+void ThreadTest4() {
+    DEBUG('t', "Entering ThreadTestPriority\n");
+    int priors[8] = { 4, 2, 9, 12, 0, 15, 7, 13 };
+    for(int i = 0; i < 8; i++) {
+        Thread *t = new Thread("test thread", priors[i]);
+        t->Fork(SimpleThreadWithPriority, priors[i]);
+    }
+    SimpleThreadWithPriority(8);
+}
+
+void ThreadTest5() {
+    DEBUG('t', "Entering ThreadTestTimeSlice\n");
+    int priors[5] = { 0, 5, 2, 11, 14 };
+    char* names[5] = { "forked 0", "forked 1", "forked 2", "forked 3", "forked 4" };
+    for(int i = 0; i < 5; i++) {
+        Thread *t = new Thread(names[i], priors[i]);
+        t->Fork(SimpleThreadTimeSlice, priors[i]);
+    }
+    SimpleThreadTimeSlice(8);
+}
+
 
 //----------------------------------------------------------------------
 // ThreadTest
@@ -63,7 +128,19 @@ ThreadTest()
     switch (testnum) {
     case 1:
 	ThreadTest1();
-	break;
+    break;
+    case 2:
+    ThreadTest2();
+    break;
+    case 3:
+    ThreadTest3();
+    break;
+    case 4:
+    ThreadTest4();
+    break;
+    case 5:
+    ThreadTest5();
+    break;
     default:
 	printf("No test specified.\n");
 	break;
