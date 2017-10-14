@@ -117,7 +117,7 @@ class Thread {
     void UpdateDynamicPriority() {
       dynamicPrior = priority*(1 + timeSliceNum);
       if(dynamicPrior > 100000000)
-        dynamicPrior = 100000000
+        dynamicPrior = 100000000;
     }
 
   private:
