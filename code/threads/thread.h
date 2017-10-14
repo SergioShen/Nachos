@@ -114,7 +114,11 @@ class Thread {
     int getDynamicPriority() { return dynamicPrior; }
     void IncreaseTimeSliceNum() { timeSliceNum++; }
     int getTimeSliceNum() { return timeSliceNum; }
-    void UpdateDynamicPriority() { dynamicPrior = priority*(1 + timeSliceNum); }
+    void UpdateDynamicPriority() {
+      dynamicPrior = priority*(1 + timeSliceNum);
+      if(dynamicPrior > 100000000)
+        dynamicPrior = 100000000
+    }
 
   private:
     // some of the private data for this class is listed above
