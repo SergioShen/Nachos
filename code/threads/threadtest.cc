@@ -118,7 +118,7 @@ void ThreadTest5() {
 }
 
 //----------------------------------------------------------------------
-// Sync test functions
+// Producer-Consumer test functions
 //----------------------------------------------------------------------
 
 int buffer = 0;
@@ -218,6 +218,27 @@ void ThreadTest7() {
     consumer->Fork(ConditionConsumerRoutine, 0);
 }
 
+//----------------------------------------------------------------------
+// Barrier test functions
+//----------------------------------------------------------------------
+Barrier *barrierTest;
+
+void SimpleThreadBarrierWait(int arg) {
+    printf("*** thread %d running...\n", arg);
+    barrierTest->Wait();
+    printf("*** thread %d resume...\n", arg);
+}
+
+void ThreadTest8() {
+    barrierTest = new Barrier("test barrier", 5);
+    printf("*** thread main running...\n");
+    for(int i = 0; i < 4; i++) {
+        Thread *t = new Thread("test thread");
+        t->Fork(SimpleThreadBarrierWait, i);
+    }
+    barrierTest->Wait();
+    printf("*** thread main resume...\n");
+}
 
 //----------------------------------------------------------------------
 // ThreadTest
@@ -248,6 +269,9 @@ ThreadTest()
     break;
     case 7:
     ThreadTest7();
+    break;
+    case 8:
+    ThreadTest8();
     break;
     default:
 	printf("No test specified.\n");

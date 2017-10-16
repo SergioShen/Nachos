@@ -135,4 +135,28 @@ class Condition {
     // plus some other stuff you'll need to define
     List *queue;
 };
+
+// The following class defines a barrier. A barrier make current thread
+// sleep until all synchronized threads reach the same point. There is
+// only one operation on Barrier:
+//
+//  Wait() -- Relinquish the CPU until the number of blocked threads reach
+//    *threadNumber*, then wake up all blocked threads
+//
+class Barrier {
+  public:
+    Barrier(char *debugName, int threadNumber);
+    ~Barrier();
+    char *getName() { return name; }
+
+    void Wait();
+
+  private:
+    char *name;
+    int targetNumber;
+    int currentNumber;
+    Lock *lock;
+    Condition *condition;
+};
+
 #endif // SYNCH_H
