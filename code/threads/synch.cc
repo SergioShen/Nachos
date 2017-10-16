@@ -108,15 +108,31 @@ Semaphore::V()
 Lock::Lock(char* debugName) {
     name = debugName;
     sema = new Semaphore("Inside semaphore", 1);
+    thread = NULL;
 }
 Lock::~Lock() {
     delete sema;
 }
 void Lock::Acquire() {
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+    ASSERT(!isHeldByCurrentThread()); // lock can't be acquired twice by the same thread
     sema->P();
+    thread = currentThread;
+
+    (void) interrupt->SetLevel(oldLevel);
 }
 void Lock::Release() {
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+    ASSERT(isHeldByCurrentThread()); // only the thread holding the lock can release it
     sema->V();
+    thread = NULL;
+
+    (void) interrupt->SetLevel(oldLevel);
+}
+bool Lock::isHeldByCurrentThread() {
+    return currentThread == thread;
 }
 
 Condition::Condition(char* debugName) {

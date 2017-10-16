@@ -232,7 +232,7 @@ void SimpleThreadBarrierWait(int arg) {
 void ThreadTest8() {
     barrierTest = new Barrier("test barrier", 5);
     printf("*** thread main running...\n");
-    for(int i = 0; i < 4; i++) {
+    for(int i = 1; i <= 4; i++) {
         Thread *t = new Thread("test thread");
         t->Fork(SimpleThreadBarrierWait, i);
     }

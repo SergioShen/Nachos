@@ -81,6 +81,7 @@ class Lock {
     char* name;				// for debugging
     // plus some other stuff you'll need to define
     Semaphore *sema;
+    Thread *thread;
 };
 
 // The following class defines a "condition variable".  A condition
