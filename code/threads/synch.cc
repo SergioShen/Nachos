@@ -193,3 +193,36 @@ void Barrier::Wait() {
     condition->Broadcast(lock);
     lock->Release();
 }
+
+ReadWriteLock::ReadWriteLock(char* debugName) {
+    name = debugName;
+    write = new Lock("Inside rd lock");
+    readerNumber = 0;
+}
+ReadWriteLock::~ReadWriteLock() {
+    delete write;
+}
+void ReadWriteLock::ReaderAcquire() {
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+    readerNumber++;
+    if(readerNumber == 1)
+        write->Acquire();
+    
+    (void) interrupt->SetLevel(oldLevel);
+}
+void ReadWriteLock::ReaderRelease() {
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+
+    readerNumber--;
+    if(readerNumber == 0)
+        write->Release();
+    
+    (void) interrupt->SetLevel(oldLevel);
+}
+void ReadWriteLock::WriterAcquire() {
+    write->Acquire();
+}
+void ReadWriteLock::WriterRelease() {
+    write->Release();
+}
