@@ -157,3 +157,23 @@ void Condition::Broadcast(Lock* conditionLock) {
     
     (void) interrupt->SetLevel(oldLevel);
 }
+
+Barrier::Barrier(char *debugName, int threadNumber) {
+    name = debugName;
+    targetNumber = threadNumber;
+    currentNumber = 0;
+    lock = new Lock("Inside barrier lock");
+    condition = new Condition("Inside barrier condition");
+}
+Barrier::~Barrier() {
+    delete lock;
+    delete condition;
+}
+void Barrier::Wait() {
+    lock->Acquire();
+    currentNumber++;
+    while(currentNumber != targetNumber)
+        condition->Wait(lock); // wait until all threads reach here
+    condition->Broadcast(lock);
+    lock->Release();
+}
