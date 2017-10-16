@@ -160,4 +160,35 @@ class Barrier {
     Condition *condition;
 };
 
+// The following class defines a reader-writer lock. A reader-writer lock
+// allows several readers to read data concurrently. But once a writer get
+// the lock, other readers or writers will be blocked. There are 4 operations
+// on reader-writer lock:
+//
+//  ReaderAcqui() -- Increase the reader count. Call P() operation of *write*
+//    semaphore if caller thread is the first reader.
+//  
+//  ReaderV() -- Decrease the reader count. Call V() operation of *write*
+//    semaphore if caller thread is the last reader.
+// 
+//  WriterP() -- Call P() operation of *write* semaphore
+//
+//  WriterV() -- Call V() operation of *write* semaphore
+//
+class ReadWriteLock {
+  public:
+    ReadWriteLock(char* debugName);
+    ~ReadWriteLock();
+    char *getName() { return name; }
+    void ReaderAcquire();
+    void ReaderRelease();
+    void WriterAcquire();
+    void WriterRelease();
+
+  private:
+    char *name;
+    Lock *write;
+    int readerNumber;
+};
+
 #endif // SYNCH_H
