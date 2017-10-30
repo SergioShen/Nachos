@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "xlocale": "cpp",
+        "syscall.h": "c"
+    }
+}
