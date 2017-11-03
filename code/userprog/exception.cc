@@ -126,8 +126,8 @@ ExceptionHandler(ExceptionType which)
         TranslationEntry *pageTableEntry = &machine->pageTable[vpn];
 
         // Handle TLB miss
-        FIFOReplace(pageTableEntry);
-        //LRUReplace(pageTableEntry);
+        // FIFOReplace(pageTableEntry);
+        LRUReplace(pageTableEntry);
 #else
         ASSERT(false);
 #endif
