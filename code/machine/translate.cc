@@ -223,6 +223,7 @@ Machine::Translate(int virtAddr, int* physAddr, int size, bool writing)
         for (entry = NULL, i = 0; i < TLBSize; i++)
     	    if (tlb[i].valid && (tlb[i].virtualPage == vpn)) {
 		entry = &tlb[i];			// FOUND!
+		entry->lastUseTime = stats->totalTicks;
 		break;
 	    }
 	if (entry == NULL) {				// not found
