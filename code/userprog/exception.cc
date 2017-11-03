@@ -88,6 +88,7 @@ ExceptionHandler(ExceptionType which)
         // Write TLB
         ASSERT(entry != NULL);
         memcpy(entry, pageTableEntry, sizeof(TranslationEntry));
+        entry->valid = true;
         DEBUG('a', "Write virtual page %d into TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
 #else
         ASSERT(false);
