@@ -44,13 +44,35 @@ SimpleThread(int which)
 void
 ThreadTest1()
 {
-    DEBUG('t', "Entering ThreadTest1");
+    DEBUG('t', "Entering ThreadTest1\n");
 
     Thread *t = new Thread("forked thread");
 
     t->Fork(SimpleThread, 1);
     SimpleThread(0);
+    printThreadStatus();
 }
+
+void ThreadTest2() {
+    DEBUG('t', "Entering ThreadTest150\n");
+    for(int i = 1; i < 128; i++) {
+        Thread *t = new Thread("test thread");
+        t->Fork(SimpleThread, i);
+    }
+    SimpleThread(0);
+    printThreadStatus();
+}
+
+void ThreadTest3() {
+    DEBUG('t', "Entering ThreadTest150\n");
+    for(int i = 1; i < 150; i++) {
+        Thread *t = new Thread("test thread");
+        t->Fork(SimpleThread, i);
+    }
+    SimpleThread(0);
+    printThreadStatus();
+}
+
 
 //----------------------------------------------------------------------
 // ThreadTest
@@ -63,7 +85,13 @@ ThreadTest()
     switch (testnum) {
     case 1:
 	ThreadTest1();
-	break;
+    break;
+    case 2:
+    ThreadTest2();
+    break;
+    case 3:
+    ThreadTest3();
+    break;
     default:
 	printf("No test specified.\n");
 	break;
