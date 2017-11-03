@@ -60,13 +60,19 @@ extern void Cleanup();
 static void
 TimerInterruptHandler(int dummy)
 {
-    if (interrupt->getStatus() != IdleMode)
-	interrupt->YieldOnReturn();
+    DEBUG('t', "Time interrupt! Name: %-8s, PR: %4d, TS: %4d, DP: %4d\n", currentThread->getName(),currentThread->getPriority(), currentThread->getTimeSliceNum(), currentThread->getDynamicPriority());
+    currentThread->IncreaseTimeSliceNum();
+    currentThread->UpdateDynamicPriority();
+    if (interrupt->getStatus() != IdleMode) {
+        Thread* pendingThread = scheduler->getFirst();
+        if(pendingThread != NULL && pendingThread->getDynamicPriority() < currentThread->getDynamicPriority())
+            interrupt->YieldOnReturn();
+    }
 }
 
 void printThreadStatus() {
     printf("\n");
-    printf("%4s %6s %-16s %-8s\n", "TID", "UID", "NAME", "STATUS");
+    printf("%4s %6s %4s %-16s %-8s\n", "TID", "UID", "PRIO", "NAME", "STATUS");
     DEBUG('t', "Print current thread status\n");
     if(currentThread != NULL)
         currentThread->printTSInfo();
@@ -147,7 +153,7 @@ Initialize(int argc, char **argv)
     stats = new Statistics();			// collect statistics
     interrupt = new Interrupt;			// start up interrupt handling
     scheduler = new Scheduler();		// initialize the ready queue
-    if (randomYield)				// start the timer (if needed)
+    // if (randomYield)				// start the timer (if needed)
 	timer = new Timer(TimerInterruptHandler, 0, randomYield);
 
     threadToBeDestroyed = NULL;

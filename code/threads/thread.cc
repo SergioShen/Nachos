@@ -37,7 +37,7 @@ int Thread::totalNumber(0);
 //	"threadName" is an arbitrary string, useful for debugging.
 //----------------------------------------------------------------------
 
-Thread::Thread(char* threadName)
+Thread::Thread(char* threadName, int prior)
 {
     if(totalNumber >= 128) {
         printf("Trying to create too many threads.\n");
@@ -51,6 +51,9 @@ Thread::Thread(char* threadName)
     userID = 1001;
     threadID = nextThreadID;
     nextThreadID++;
+    priority = prior;
+    timeSliceNum = 0;
+    dynamicPrior = priority;
     DEBUG('t', "Creating thread: NAME: %s, UID: %d, TID: %d\n", name, userID, threadID);
 
     totalNumber++;
@@ -116,6 +119,9 @@ Thread::Fork(VoidFunctionPtr func, int arg)
     scheduler->ReadyToRun(this);	// ReadyToRun assumes that interrupts 
 					// are disabled!
     (void) interrupt->SetLevel(oldLevel);
+    
+    if(currentThread->getPriority() > this->priority)
+        currentThread->Yield();
 }    
 
 //----------------------------------------------------------------------
