@@ -179,6 +179,7 @@ class Machine {
     TranslationEntry *tlb;		// this pointer should be considered 
 					// "read-only" to Nachos kernel code
 	int nextVictim;
+	int totalMiss;
 
     TranslationEntry *pageTable;
     unsigned int pageTableSize;

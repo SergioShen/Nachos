@@ -48,6 +48,61 @@
 //	are in machine.h.
 //----------------------------------------------------------------------
 
+void FIFOReplace(TranslationEntry *pageTableEntry) {
+    // Search for an empty block in TLB
+    TranslationEntry *entry;
+    int i;
+    for (entry = NULL, i = 0; i < TLBSize; i++)
+        if (!machine->tlb[i].valid) {
+            // FOUND an empty block
+            entry = &machine->tlb[i];
+            break;
+        }
+    
+    // If there is no empty block in TLB
+    if(entry == NULL) {
+        entry = machine->tlb + machine->nextVictim;
+        machine->nextVictim = (machine->nextVictim + 1) % TLBSize;
+        DEBUG('a', "Kick virtual page %d out of TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+    }
+
+    // Write TLB
+    ASSERT(entry != NULL);
+    *entry = *pageTableEntry;
+    entry->valid = true;
+    DEBUG('a', "Write virtual page %d into TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+}
+
+void LRUReplace(TranslationEntry *pageTableEntry) {
+    // Search for an empty block in TLB
+    TranslationEntry *entry;
+    int i, minTime = 0x7FFFFFFF, minIndex;
+    for (entry = NULL, i = 0; i < TLBSize; i++) {
+        if (!machine->tlb[i].valid) {
+            // FOUND an empty block
+            entry = &machine->tlb[i];
+            break;
+        }
+        if(machine->tlb[i].lastUseTime < minTime) {
+            minIndex = i;
+            minTime = machine->tlb[i].lastUseTime;
+        }
+    }
+    
+    // If there is no empty block in TLB
+    if(entry == NULL) {
+        entry = machine->tlb + minIndex;
+        DEBUG('a', "Kick virtual page %d out of TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+    }
+
+    // Write TLB
+    ASSERT(entry != NULL);
+    *entry = *pageTableEntry;
+    entry->valid = true;
+    entry->lastUseTime = stats->totalTicks; // Update last use time
+    DEBUG('a', "Write virtual page %d into TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+}
+
 void
 ExceptionHandler(ExceptionType which)
 {
@@ -59,6 +114,8 @@ ExceptionHandler(ExceptionType which)
     }
     else if(which == PageFaultException) {
 #ifdef USE_TLB
+        machine->totalMiss++;
+        DEBUG('a', "TLB miss, %d in total\n", machine->totalMiss);
         int badVAddr = machine->registers[BadVAddrReg];
         unsigned int vpn = (unsigned) badVAddr / PageSize;
         unsigned int offset = (unsigned) badVAddr % PageSize;
@@ -68,28 +125,9 @@ ExceptionHandler(ExceptionType which)
         ASSERT(machine->pageTable[vpn].valid);
         TranslationEntry *pageTableEntry = &machine->pageTable[vpn];
 
-        // Search for an empty block in TLB
-        TranslationEntry *entry;
-        int i;
-        for (entry = NULL, i = 0; i < TLBSize; i++)
-            if (!machine->tlb[i].valid) {
-                // FOUND an empty block
-                entry = &machine->tlb[i];
-                break;
-            }
-        
-        // If there is no empty block in TLB
-        if(entry == NULL) {
-            entry = machine->tlb + machine->nextVictim;
-            machine->nextVictim = (machine->nextVictim + 1) % TLBSize;
-            DEBUG('a', "Kick virtual page %d out of TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
-        }
-
-        // Write TLB
-        ASSERT(entry != NULL);
-        memcpy(entry, pageTableEntry, sizeof(TranslationEntry));
-        entry->valid = true;
-        DEBUG('a', "Write virtual page %d into TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+        // Handle TLB miss
+        FIFOReplace(pageTableEntry);
+        //LRUReplace(pageTableEntry);
 #else
         ASSERT(false);
 #endif
