@@ -56,7 +56,44 @@ ExceptionHandler(ExceptionType which)
     if ((which == SyscallException) && (type == SC_Halt)) {
 	DEBUG('a', "Shutdown, initiated by user program.\n");
    	interrupt->Halt();
-    } else {
+    }
+    else if(which == PageFaultException) {
+#ifdef USE_TLB
+        int badVAddr = machine->registers[BadVAddrReg];
+        unsigned int vpn = (unsigned) badVAddr / PageSize;
+        unsigned int offset = (unsigned) badVAddr % PageSize;
+
+        // Check the page table
+        ASSERT(vpn < machine->pageTableSize);
+        ASSERT(machine->pageTable[vpn].valid);
+        TranslationEntry *pageTableEntry = &machine->pageTable[vpn];
+
+        // Search for an empty block in TLB
+        TranslationEntry *entry;
+        int i;
+        for (entry = NULL, i = 0; i < TLBSize; i++)
+            if (!machine->tlb[i].valid) {
+                // FOUND an empty block
+                entry = &machine->tlb[i];
+                break;
+            }
+        
+        // If there is no empty block in TLB
+        if(entry == NULL) {
+            entry = machine->tlb + machine->nextVictim;
+            machine->nextVictim = (machine->nextVictim + 1) % TLBSize;
+            DEBUG('a', "Kick virtual page %d out of TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+        }
+
+        // Write TLB
+        ASSERT(entry != NULL);
+        memcpy(entry, pageTableEntry, sizeof(TranslationEntry));
+        DEBUG('a', "Write virtual page %d into TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+#else
+        ASSERT(false);
+#endif
+    }
+    else {
 	printf("Unexpected user mode exception %d %d\n", which, type);
 	ASSERT(FALSE);
     }
