@@ -25,6 +25,7 @@
 #include "utility.h"
 #include "translate.h"
 #include "disk.h"
+#include "bitmap.h"
 
 // Definitions related to the size, and format of user memory
 
@@ -182,7 +183,9 @@ class Machine {
 	int totalMiss;
 
     TranslationEntry *pageTable;
-    unsigned int pageTableSize;
+	unsigned int pageTableSize;
+	
+	BitMap *memUseage;
 
   private:
     bool singleStep;		// drop back into the debugger after each

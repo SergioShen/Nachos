@@ -88,15 +88,21 @@ AddrSpace::AddrSpace(OpenFile *executable)
 // first, set up the translation 
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
-	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-    pageTable[i].physicalPage = i;
-    pageTable[i].lastUseTime = 0;
-	pageTable[i].valid = TRUE;
-	pageTable[i].use = FALSE;
-	pageTable[i].dirty = FALSE;
-	pageTable[i].readOnly = FALSE;  // if the code segment was entirely on 
-					// a separate page, we could set its 
-					// pages to be read-only
+        int ppn = machine->memUseage->Find();
+
+        // Make sure we have enough space to allocate the program
+        ASSERT(ppn != -1);
+
+        DEBUG('a', "Allocate virtual page #%d at physical page #%d\n", i, ppn);
+        pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
+        pageTable[i].physicalPage = ppn;
+        pageTable[i].lastUseTime = 0;
+        pageTable[i].valid = TRUE;
+        pageTable[i].use = FALSE;
+        pageTable[i].dirty = FALSE;
+        pageTable[i].readOnly = FALSE;  // if the code segment was entirely on 
+                        // a separate page, we could set its 
+                        // pages to be read-only
     }
     
 // zero out the entire address space, to zero the unitialized data segment 
@@ -126,6 +132,12 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 AddrSpace::~AddrSpace()
 {
+    for(int i = 0; i < numPages; i++) {
+        if(pageTable[i].valid) {
+            DEBUG('a', "Clear physical page #%d\n", pageTable[i].physicalPage);
+            machine->memUseage->Clear(pageTable[i].physicalPage);
+        }
+    }
    delete pageTable;
 }
 
