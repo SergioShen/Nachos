@@ -60,9 +60,12 @@ Machine::Machine(bool debug)
         registers[i] = 0;
     mainMemory = new char[MemorySize];
     for (i = 0; i < MemorySize; i++)
-      	mainMemory[i] = 0;
+          mainMemory[i] = 0;
+    memUseage = new BitMap(NumPhysPages);
 #ifdef USE_TLB
     tlb = new TranslationEntry[TLBSize];
+    nextVictim = 0;
+    totalMiss = 0;
     for (i = 0; i < TLBSize; i++)
 	tlb[i].valid = FALSE;
     pageTable = NULL;
