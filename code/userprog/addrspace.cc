@@ -103,24 +103,37 @@ AddrSpace::AddrSpace(OpenFile *executable)
         pageTable[i].readOnly = FALSE;  // if the code segment was entirely on 
                         // a separate page, we could set its 
                         // pages to be read-only
+        bzero(&(machine->mainMemory[ppn * PageSize]), PageSize);
     }
     
 // zero out the entire address space, to zero the unitialized data segment 
 // and the stack segment
-    bzero(machine->mainMemory, size);
+    // bzero(machine->mainMemory, size);
 
 // then, copy in the code and data segments into memory
     if (noffH.code.size > 0) {
         DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
-			noffH.code.virtualAddr, noffH.code.size);
-        executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]),
-			noffH.code.size, noffH.code.inFileAddr);
+            noffH.code.virtualAddr, noffH.code.size);
+        for(int i = 0; i < noffH.code.size; i++) {
+            int vpn = (noffH.code.virtualAddr + i) / PageSize;
+            int offset = (noffH.code.virtualAddr + i) % PageSize;
+            int ppn = pageTable[vpn].physicalPage;
+            int physicalAddr = ppn * PageSize + offset;
+            executable->ReadAt(&(machine->mainMemory[physicalAddr]),
+                1, noffH.code.inFileAddr + i);
+        }
     }
     if (noffH.initData.size > 0) {
         DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", 
-			noffH.initData.virtualAddr, noffH.initData.size);
-        executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
-			noffH.initData.size, noffH.initData.inFileAddr);
+            noffH.initData.virtualAddr, noffH.initData.size);
+        for(int i = 0; i < noffH.initData.size; i++) {
+            int vpn = (noffH.initData.virtualAddr + i) / PageSize;
+            int offset = (noffH.initData.virtualAddr + i) % PageSize;
+            int ppn = pageTable[vpn].physicalPage;
+            int physicalAddr = ppn * PageSize + offset;
+            executable->ReadAt(&(machine->mainMemory[physicalAddr]),
+                1, noffH.initData.inFileAddr + i);
+        }
     }
 
 }
@@ -182,7 +195,12 @@ AddrSpace::InitRegisters()
 //----------------------------------------------------------------------
 
 void AddrSpace::SaveState() 
-{}
+{
+    // Make TLB invalid on a context switch
+    for(int i = 0; i < TLBSize; i++) {
+        machine->tlb[i].valid = false;
+    }
+}
 
 //----------------------------------------------------------------------
 // AddrSpace::RestoreState
