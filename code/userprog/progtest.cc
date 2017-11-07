@@ -14,6 +14,13 @@
 #include "addrspace.h"
 #include "synch.h"
 
+void RunUserProgram(int arg)
+{
+    currentThread->space->InitRegisters();
+    currentThread->space->RestoreState();
+    Machine *p = (Machine *)arg;
+    p->Run();
+}
 //----------------------------------------------------------------------
 // StartProcess
 // 	Run a user program.  Open the executable, load it into
@@ -24,7 +31,7 @@ void
 StartProcess(char *filename)
 {
     OpenFile *executable = fileSystem->Open(filename);
-    AddrSpace *space;
+    AddrSpace *space, *space2;
 
     if (executable == NULL) {
 	printf("Unable to open file %s\n", filename);
@@ -32,6 +39,11 @@ StartProcess(char *filename)
     }
     space = new AddrSpace(executable);    
     currentThread->space = space;
+
+    Thread *fork = new Thread("forked");
+    fork->Fork(RunUserProgram, (int)machine);
+    space2 = new AddrSpace(executable);
+    fork->space = space2;
 
     delete executable;			// close file
 
