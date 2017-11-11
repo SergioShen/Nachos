@@ -217,7 +217,8 @@ ExceptionHandler(ExceptionType which)
 #endif
     }
     else if((which == SyscallException) && (type == SC_Exit)) {
-        DEBUG('a', "Exit called by thread %s\n", currentThread->getName());
+        int returnValue = machine->ReadRegister(4);
+        DEBUG('a', "Exit called by thread %s with return value %d\n", currentThread->getName(), returnValue);
         currentThread->Finish();
     }
     else {
