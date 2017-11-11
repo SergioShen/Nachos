@@ -15,6 +15,7 @@
 
 #include "copyright.h"
 #include "filesys.h"
+#include "noff.h"
 
 #define UserStackSize		1024 	// increase this as necessary!
 
@@ -35,7 +36,14 @@ class AddrSpace {
     TranslationEntry *pageTable;	// Assume linear page table translation
 					// for now!
     unsigned int numPages;		// Number of pages in the virtual 
-					// address space
+          // address space
+  
+  public:
+    OpenFile *executable;
+
 };
+
+void 
+SwapHeader (NoffHeader *noffH);
 
 #endif // ADDRSPACE_H

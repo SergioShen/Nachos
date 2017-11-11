@@ -24,6 +24,7 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
+#include "addrspace.h"
 
 //----------------------------------------------------------------------
 // ExceptionHandler
@@ -103,6 +104,82 @@ void LRUReplace(TranslationEntry *pageTableEntry) {
     DEBUG('a', "Write virtual page %d into TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
 }
 
+void PageTableInvalidHandler(int badVAddr, unsigned int vpn) {
+    ASSERT(machine->pageTable[vpn].valid == FALSE);
+
+    // First, we need to find a empty physical page and initialize page table entry
+    int ppn = machine->memUseage->Find();
+
+    // Make sure we have enough space to allocate the program
+    ASSERT(ppn != -1);
+
+    DEBUG('a', "Allocate virtual page #%d at physical page #%d\n", vpn, ppn);
+    machine->pageTable[vpn].virtualPage = vpn;	// for now, virtual page # = phys page #
+    machine->pageTable[vpn].physicalPage = ppn;
+    machine->pageTable[vpn].lastUseTime = 0;
+    machine->pageTable[vpn].valid = TRUE;
+    machine->pageTable[vpn].use = FALSE;
+    machine->pageTable[vpn].dirty = FALSE;
+    machine->pageTable[vpn].readOnly = FALSE;  // if the code segment was entirely on 
+                    // a separate page, we could set its 
+                    // pages to be read-only
+    bzero(&(machine->mainMemory[ppn * PageSize]), PageSize);
+    
+    // If this page is from executable file segment, we need to copy data
+    NoffHeader noffH;
+    OpenFile *executable = currentThread->space->executable;
+
+    // Read noff header
+    executable->ReadAt((char *)&noffH, sizeof(noffH), 0);
+    if ((noffH.noffMagic != NOFFMAGIC) && 
+		(WordToHost(noffH.noffMagic) == NOFFMAGIC))
+        SwapHeader(&noffH);
+    
+    // Copy in the code and data segments into memory
+    int begin = vpn * PageSize, end = begin + PageSize;
+    if ((noffH.code.size > 0)
+        && (end > noffH.code.virtualAddr)
+        && (begin < noffH.code.virtualAddr + noffH.code.size)) {
+        // If page fault occurs at code segment
+        if(begin < noffH.code.virtualAddr)
+            begin = noffH.code.virtualAddr;
+        if(end > noffH.code.virtualAddr + noffH.code.size) 
+            end = noffH.code.virtualAddr + noffH.code.size;
+        
+        DEBUG('a', "Read code segment, at 0x%x, size %d\n", begin, end - begin);
+        begin -= vpn * PageSize;
+        end -= vpn * PageSize;
+        for(int i = begin; i < end; i++) {
+            int virtualAddr = vpn * PageSize + i;
+            int inFileOffest = virtualAddr - noffH.code.virtualAddr;
+            int physicalAddr = ppn * PageSize + i;
+            executable->ReadAt(&(machine->mainMemory[physicalAddr]),
+                1, noffH.code.inFileAddr + inFileOffest);
+        }
+    }
+    else if ((noffH.initData.size > 0)
+        && (end > noffH.initData.virtualAddr)
+        && (begin < noffH.initData.virtualAddr + noffH.initData.size)) {
+        // If page fault occurs at initData segment
+        int begin = vpn * PageSize, end = begin + PageSize;
+        if(begin < noffH.initData.virtualAddr)
+            begin = noffH.initData.virtualAddr;
+        if(end > noffH.initData.virtualAddr + noffH.initData.size) 
+            end = noffH.initData.virtualAddr + noffH.initData.size;
+        DEBUG('a', "Read initData segment, at 0x%x, size %d\n", begin, end - begin);
+
+        begin -= vpn * PageSize;
+        end -= vpn * PageSize;
+        for(int i = begin; i < end; i++) {
+            int virtualAddr = vpn * PageSize + i;
+            int inFileOffest = virtualAddr - noffH.initData.virtualAddr;
+            int physicalAddr = ppn * PageSize + i;
+            executable->ReadAt(&(machine->mainMemory[physicalAddr]),
+                1, noffH.initData.inFileAddr + inFileOffest);
+        }
+    }
+}
+
 void
 ExceptionHandler(ExceptionType which)
 {
@@ -122,7 +199,14 @@ ExceptionHandler(ExceptionType which)
 
         // Check the page table
         ASSERT(vpn < machine->pageTableSize);
-        ASSERT(machine->pageTable[vpn].valid);
+
+        // Handle REAL page fault
+        if(!machine->pageTable[vpn].valid) {
+            // We need to read page from executable file
+            DEBUG('a', "Page table miss\n");
+            PageTableInvalidHandler(badVAddr, vpn);
+        }
+
         TranslationEntry *pageTableEntry = &machine->pageTable[vpn];
 
         // Handle TLB miss

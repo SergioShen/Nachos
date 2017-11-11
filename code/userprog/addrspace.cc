@@ -18,7 +18,6 @@
 #include "copyright.h"
 #include "system.h"
 #include "addrspace.h"
-#include "noff.h"
 #ifdef HOST_SPARC
 #include <strings.h>
 #endif
@@ -30,7 +29,7 @@
 //	endian machine, and we're now running on a big endian machine.
 //----------------------------------------------------------------------
 
-static void 
+void 
 SwapHeader (NoffHeader *noffH)
 {
 	noffH->noffMagic = WordToHost(noffH->noffMagic);
@@ -62,6 +61,7 @@ SwapHeader (NoffHeader *noffH)
 
 AddrSpace::AddrSpace(OpenFile *executable)
 {
+    this->executable = executable;
     NoffHeader noffH;
     unsigned int i, size;
 
@@ -88,54 +88,9 @@ AddrSpace::AddrSpace(OpenFile *executable)
 // first, set up the translation 
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
-        int ppn = machine->memUseage->Find();
-
-        // Make sure we have enough space to allocate the program
-        ASSERT(ppn != -1);
-
-        DEBUG('a', "Allocate virtual page #%d at physical page #%d\n", i, ppn);
         pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-        pageTable[i].physicalPage = ppn;
-        pageTable[i].lastUseTime = 0;
-        pageTable[i].valid = TRUE;
-        pageTable[i].use = FALSE;
-        pageTable[i].dirty = FALSE;
-        pageTable[i].readOnly = FALSE;  // if the code segment was entirely on 
-                        // a separate page, we could set its 
-                        // pages to be read-only
-        bzero(&(machine->mainMemory[ppn * PageSize]), PageSize);
+        pageTable[i].valid = FALSE;
     }
-    
-// zero out the entire address space, to zero the unitialized data segment 
-// and the stack segment
-    // bzero(machine->mainMemory, size);
-
-// then, copy in the code and data segments into memory
-    if (noffH.code.size > 0) {
-        DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
-            noffH.code.virtualAddr, noffH.code.size);
-        for(int i = 0; i < noffH.code.size; i++) {
-            int vpn = (noffH.code.virtualAddr + i) / PageSize;
-            int offset = (noffH.code.virtualAddr + i) % PageSize;
-            int ppn = pageTable[vpn].physicalPage;
-            int physicalAddr = ppn * PageSize + offset;
-            executable->ReadAt(&(machine->mainMemory[physicalAddr]),
-                1, noffH.code.inFileAddr + i);
-        }
-    }
-    if (noffH.initData.size > 0) {
-        DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", 
-            noffH.initData.virtualAddr, noffH.initData.size);
-        for(int i = 0; i < noffH.initData.size; i++) {
-            int vpn = (noffH.initData.virtualAddr + i) / PageSize;
-            int offset = (noffH.initData.virtualAddr + i) % PageSize;
-            int ppn = pageTable[vpn].physicalPage;
-            int physicalAddr = ppn * PageSize + offset;
-            executable->ReadAt(&(machine->mainMemory[physicalAddr]),
-                1, noffH.initData.inFileAddr + i);
-        }
-    }
-
 }
 
 //----------------------------------------------------------------------
@@ -152,6 +107,7 @@ AddrSpace::~AddrSpace()
         }
     }
    delete pageTable;
+   delete executable;
 }
 
 //----------------------------------------------------------------------
