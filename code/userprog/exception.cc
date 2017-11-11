@@ -132,6 +132,10 @@ ExceptionHandler(ExceptionType which)
         ASSERT(false);
 #endif
     }
+    else if((which == SyscallException) && (type == SC_Exit)) {
+        DEBUG('a', "Exit called by thread %s\n", currentThread->getName());
+        currentThread->Finish();
+    }
     else {
 	printf("Unexpected user mode exception %d %d\n", which, type);
 	ASSERT(FALSE);
