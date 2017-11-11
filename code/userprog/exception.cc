@@ -65,6 +65,7 @@ void FIFOReplace(TranslationEntry *pageTableEntry) {
         entry = machine->tlb + machine->nextVictim;
         machine->nextVictim = (machine->nextVictim + 1) % TLBSize;
         DEBUG('a', "Kick virtual page %d out of TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+        machine->pageTable[entry->virtualPage] = *entry; // Write back to page table
     }
 
     // Write TLB
@@ -94,6 +95,7 @@ void LRUReplace(TranslationEntry *pageTableEntry) {
     if(entry == NULL) {
         entry = machine->tlb + minIndex;
         DEBUG('a', "Kick virtual page %d out of TLB, index: %d\n", entry->virtualPage, entry - machine->tlb);
+        machine->pageTable[entry->virtualPage] = *entry; // Write back to page table
     }
 
     // Write TLB
