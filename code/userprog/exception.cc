@@ -148,16 +148,12 @@ void PageTableInvalidHandler(int badVAddr, unsigned int vpn) {
         if(end > noffH.code.virtualAddr + noffH.code.size) 
             end = noffH.code.virtualAddr + noffH.code.size;
         
-        DEBUG('a', "Read code segment, at 0x%x, size %d\n", begin, end - begin);
-        begin -= vpn * PageSize;
-        end -= vpn * PageSize;
-        for(int i = begin; i < end; i++) {
-            int virtualAddr = vpn * PageSize + i;
-            int inFileOffest = virtualAddr - noffH.code.virtualAddr;
-            int physicalAddr = ppn * PageSize + i;
-            executable->ReadAt(&(machine->mainMemory[physicalAddr]),
-                1, noffH.code.inFileAddr + inFileOffest);
-        }
+        int size = end - begin;
+        int physicalBegin = ppn * PageSize + (begin - vpn * PageSize);
+        int inFileBegin = noffH.code.inFileAddr + (begin - noffH.code.virtualAddr);
+        DEBUG('a', "Read code segment, at 0x%x, size %d\n", begin, size);
+        executable->ReadAt(&(machine->mainMemory[physicalBegin]),
+                size, inFileBegin);
     }
     else if ((noffH.initData.size > 0)
         && (end > noffH.initData.virtualAddr)
@@ -168,17 +164,13 @@ void PageTableInvalidHandler(int badVAddr, unsigned int vpn) {
             begin = noffH.initData.virtualAddr;
         if(end > noffH.initData.virtualAddr + noffH.initData.size) 
             end = noffH.initData.virtualAddr + noffH.initData.size;
-        DEBUG('a', "Read initData segment, at 0x%x, size %d\n", begin, end - begin);
 
-        begin -= vpn * PageSize;
-        end -= vpn * PageSize;
-        for(int i = begin; i < end; i++) {
-            int virtualAddr = vpn * PageSize + i;
-            int inFileOffest = virtualAddr - noffH.initData.virtualAddr;
-            int physicalAddr = ppn * PageSize + i;
-            executable->ReadAt(&(machine->mainMemory[physicalAddr]),
-                1, noffH.initData.inFileAddr + inFileOffest);
-        }
+        int size = end - begin;
+        int physicalBegin = ppn * PageSize + (begin - vpn * PageSize);
+        int inFileBegin = noffH.initData.inFileAddr + (begin - noffH.initData.virtualAddr);
+        DEBUG('a', "Read initData segment, at 0x%x, size %d\n", begin, size);
+        executable->ReadAt(&(machine->mainMemory[physicalBegin]),
+                size, inFileBegin);
     }
 }
 
