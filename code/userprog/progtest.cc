@@ -45,7 +45,7 @@ StartProcess(char *filename)
     space2 = new AddrSpace(executable);
     fork->space = space2;
 
-    delete executable;			// close file
+    // delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values
     space->RestoreState();		// load page table register
