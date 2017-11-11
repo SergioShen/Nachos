@@ -86,6 +86,7 @@ Machine::Machine(bool debug)
 Machine::~Machine()
 {
     delete [] mainMemory;
+    delete memUseage;
     if (tlb != NULL)
         delete [] tlb;
 }

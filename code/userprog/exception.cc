@@ -113,7 +113,7 @@ void PageTableInvalidHandler(int badVAddr, unsigned int vpn) {
     // Make sure we have enough space to allocate the program
     ASSERT(ppn != -1);
 
-    DEBUG('a', "Allocate virtual page #%d at physical page #%d\n", vpn, ppn);
+    DEBUG('a', "Allocate Vpage #%d of thread %s at Ppage #%d, time = %d\n", vpn, currentThread->getName(), ppn, stats->totalTicks);
     machine->pageTable[vpn].virtualPage = vpn;	// for now, virtual page # = phys page #
     machine->pageTable[vpn].physicalPage = ppn;
     machine->pageTable[vpn].lastUseTime = 0;

@@ -41,9 +41,9 @@ StartProcess(char *filename)
     currentThread->space = space;
 
     Thread *fork = new Thread("forked");
-    fork->Fork(RunUserProgram, (int)machine);
     space2 = new AddrSpace(executable);
     fork->space = space2;
+    fork->Fork(RunUserProgram, (int)machine);
 
     // delete executable;			// close file
 
