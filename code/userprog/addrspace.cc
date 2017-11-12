@@ -154,6 +154,7 @@ void AddrSpace::SaveState()
 {
     // Make TLB invalid on a context switch
     for(int i = 0; i < TLBSize; i++) {
+        machine->pageTable[tlb[i].virtualPage] = tlb[i];
         machine->tlb[i].valid = false;
     }
 }
