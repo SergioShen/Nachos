@@ -49,7 +49,7 @@
 //	are in machine.h.
 //----------------------------------------------------------------------
 int FindVictimPhysPage() {
-    return stats->totalTicks % NumPhysPages;
+    return Random() % NumPhysPages;
 }
 int getHashCode(int vpn) {
     return ((vpn * vpn) >> 4) % NumPhysPages;
