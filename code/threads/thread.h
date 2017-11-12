@@ -118,7 +118,8 @@ class Thread {
       dynamicPrior = priority*(1 + timeSliceNum);
       if(dynamicPrior > 100000000)
         dynamicPrior = 100000000;
-    }
+      }
+    int getThreadID() { return threadID; }
 
   private:
     // some of the private data for this class is listed above

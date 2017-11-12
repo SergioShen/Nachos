@@ -33,9 +33,9 @@
 					// the disk sector size, for
 					// simplicity
 
-#define NumPhysPages    64
+#define NumPhysPages    32
 #define MemorySize 	(NumPhysPages * PageSize)
-#define TLBSize		8		// if there is a TLB, make it small
+#define TLBSize		4		// if there is a TLB, make it small
 
 enum ExceptionType { NoException,           // Everything ok!
 		     SyscallException,      // A program executed a system call.
@@ -90,6 +90,13 @@ class Instruction {
     char rs, rt, rd; // Three registers from instruction.
     int extra;       // Immediate or target or shamt field or offset.
                      // Immediates are sign-extended.
+};
+
+class SwapAreaEntry {
+public:
+    TranslationEntry entry;
+    char content[PageSize];
+    SwapAreaEntry *next;
 };
 
 // The following class defines the simulated host workstation hardware, as 
@@ -186,7 +193,14 @@ class Machine {
 	unsigned int pageTableSize;
 	
 	BitMap *memUseage;
-
+	
+#ifdef USE_INVERTED_TABLE
+	TranslationEntry *invertedPageTable;
+	TranslationEntry **hashTable;
+	SwapAreaEntry *swapArea;
+	int swapAreaSize;
+	void RecycleMemory(int threadID);
+#endif
   private:
     bool singleStep;		// drop back into the debugger after each
 				// simulated instruction

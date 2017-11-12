@@ -27,11 +27,20 @@ void RunUserProgram(int arg)
 //	memory, and jump to it.
 //----------------------------------------------------------------------
 
+void newThread(char *threadName, char *filename) {
+    OpenFile *executable = fileSystem->Open(filename);
+    AddrSpace *space;
+    Thread *forked = new Thread(threadName);
+    space = new AddrSpace(executable);
+    forked->space = space;
+    forked->Fork(RunUserProgram, (int)machine);
+}
+
 void
 StartProcess(char *filename)
 {
     OpenFile *executable = fileSystem->Open(filename);
-    AddrSpace *space, *space2;
+    AddrSpace *space;
 
     if (executable == NULL) {
 	printf("Unable to open file %s\n", filename);
@@ -40,12 +49,11 @@ StartProcess(char *filename)
     space = new AddrSpace(executable);    
     currentThread->space = space;
 
-    Thread *fork = new Thread("forked");
-    fork->Fork(RunUserProgram, (int)machine);
-    space2 = new AddrSpace(executable);
-    fork->space = space2;
+    // newThread("forked1", filename);
+    // newThread("forked2", filename);
+    // newThread("forked3", filename);
 
-    delete executable;			// close file
+    // delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values
     space->RestoreState();		// load page table register
