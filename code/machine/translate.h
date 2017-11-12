@@ -28,7 +28,11 @@
 // read-only) and some bits for usage information (use and dirty).
 
 class TranslationEntry {
-  public:
+public:
+#ifdef USE_INVERTED_TABLE
+    int threadID; // The thread that owns this page
+    TranslationEntry *next; // Point to next entry that have the save hash code
+#endif
     int virtualPage;  	// The page number in virtual memory.
     int physicalPage;  	// The page number in real memory (relative to the
 			//  start of "mainMemory"
@@ -41,6 +45,6 @@ class TranslationEntry {
     bool dirty;         // This bit is set by the hardware every time the
       // page is modified.
     int lastUseTime;
-};
+  };
 
 #endif

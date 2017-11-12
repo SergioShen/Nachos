@@ -74,6 +74,19 @@ Machine::Machine(bool debug)
     pageTable = NULL;
 #endif
 
+#ifdef USE_INVERTED_TABLE
+    hashTable = new TranslationEntry*[NumPhysPages];
+    for(i = 0; i < NumPhysPages; i++)
+        hashTable[i] = NULL;
+    invertedPageTable = new TranslationEntry[NumPhysPages];
+    for(i = 0; i < NumPhysPages; i++) {
+        invertedPageTable[i].valid = FALSE;
+        invertedPageTable[i].physicalPage = i;
+        invertedPageTable[i].next = NULL;
+    }
+    swapArea = NULL;
+    swapAreaSize = 0;
+#endif
     singleStep = debug;
     CheckEndian();
 }
@@ -89,6 +102,15 @@ Machine::~Machine()
     delete memUseage;
     if (tlb != NULL)
         delete [] tlb;
+#ifdef USE_INVERTED_TABLE
+    delete invertedPageTable;
+    delete hashTable;
+    while(swapArea != NULL) {
+        SwapAreaEntry *temp = swapArea;
+        swapArea = swapArea->next;
+        delete temp;
+    }
+#endif
 }
 
 //----------------------------------------------------------------------
@@ -216,3 +238,36 @@ void Machine::WriteRegister(int num, int value)
 	registers[num] = value;
     }
 
+    
+#ifdef USE_INVERTED_TABLE    
+void Machine::RecycleMemory(int threadID) {
+    // Clear swap area
+    SwapAreaEntry *temp = swapArea;
+    while(temp != NULL && temp->entry.threadID == threadID) {
+        swapArea = swapArea->next;
+        DEBUG('v', "Clear Vpage %d of thread %d from swap area\n", temp->entry.virtualPage, threadID);
+        DEBUG('v', "Now %d pages in swap area\n", --machine->swapAreaSize);
+        delete temp;
+        temp = swapArea;
+    }
+    while(temp != NULL && temp->next != NULL) {
+        if(temp->next->entry.threadID == threadID) {
+            SwapAreaEntry *toBeDelete = temp->next;
+            temp->next = temp->next->next;
+            DEBUG('v', "Clear Vpage %d of thread %d from swap area\n", toBeDelete->entry.virtualPage, threadID);
+            DEBUG('v', "Now %d pages in swap area\n", --machine->swapAreaSize);
+            delete toBeDelete;
+        }
+        else
+            temp = temp->next;
+    }
+    // CLear main memory
+    for(int i = 0; i < NumPhysPages; i++) {
+        if(invertedPageTable[i].threadID == threadID) {
+            invertedPageTable[i].valid = FALSE;
+            DEBUG('v', "Clear physical page #%d, thread ID = %d\n", i, threadID);
+            memUseage->Clear(i);
+        }
+    }
+}
+#endif

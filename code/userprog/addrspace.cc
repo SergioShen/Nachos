@@ -77,20 +77,26 @@ AddrSpace::AddrSpace(OpenFile *executable)
 						// to leave room for the stack
     numPages = divRoundUp(size, PageSize);
     size = numPages * PageSize;
-
+    
+#ifdef USE_INVERTED_TABLE
+#else
     ASSERT(numPages <= NumPhysPages);		// check we're not trying
 						// to run anything too big --
 						// at least until we have
-						// virtual memory
+                        // virtual memory
+#endif
 
     DEBUG('a', "Initializing address space, num pages %d, size %d\n", 
 					numPages, size);
 // first, set up the translation 
+#ifdef USE_INVERTED_TABLE
+#else
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
         pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
         pageTable[i].valid = FALSE;
     }
+#endif
 }
 
 //----------------------------------------------------------------------
@@ -100,14 +106,17 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 AddrSpace::~AddrSpace()
 {
+#ifdef USE_INVERTED_TABLE
+#else
     for(int i = 0; i < numPages; i++) {
         if(pageTable[i].valid) {
-            DEBUG('a', "Clear physical page #%d\n", pageTable[i].physicalPage);
+            DEBUG('v', "Clear physical page #%d\n", pageTable[i].physicalPage);
             machine->memUseage->Clear(pageTable[i].physicalPage);
         }
     }
-   delete pageTable;
-   delete executable;
+    delete pageTable;
+#endif
+    delete executable;
 }
 
 //----------------------------------------------------------------------
@@ -154,7 +163,13 @@ void AddrSpace::SaveState()
 {
     // Make TLB invalid on a context switch
     for(int i = 0; i < TLBSize; i++) {
+#ifdef USE_INVERTED_TABLE
+        TranslationEntry *next = machine->invertedPageTable[machine->tlb[i].physicalPage].next;
+        machine->invertedPageTable[machine->tlb[i].physicalPage] = machine->tlb[i];
+        machine->invertedPageTable[machine->tlb[i].physicalPage].next = next;
+#else
         machine->pageTable[machine->tlb[i].virtualPage] = machine->tlb[i];
+#endif
         machine->tlb[i].valid = false;
     }
 }

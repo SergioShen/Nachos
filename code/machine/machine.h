@@ -92,6 +92,13 @@ class Instruction {
                      // Immediates are sign-extended.
 };
 
+class SwapAreaEntry {
+public:
+    TranslationEntry entry;
+    char content[PageSize];
+    SwapAreaEntry *next;
+};
+
 // The following class defines the simulated host workstation hardware, as 
 // seen by user programs -- the CPU registers, main memory, etc.
 // User programs shouldn't be able to tell that they are running on our 
@@ -186,7 +193,14 @@ class Machine {
 	unsigned int pageTableSize;
 	
 	BitMap *memUseage;
-
+	
+#ifdef USE_INVERTED_TABLE
+	TranslationEntry *invertedPageTable;
+	TranslationEntry **hashTable;
+	SwapAreaEntry *swapArea;
+	int swapAreaSize;
+	void RecycleMemory(int threadID);
+#endif
   private:
     bool singleStep;		// drop back into the debugger after each
 				// simulated instruction

@@ -87,9 +87,13 @@ Thread::~Thread()
     DeallocBoundedArray((char *) stack, StackSize * sizeof(int));
     
 #ifdef USER_PROGRAM
+#ifdef USE_INVERTED_TABLE
+    // Clear physical page
+    machine->RecycleMemory(this->threadID);
+#endif //USE_INVERTED_TABLE
     DEBUG('t', "Deleting address space of thread \"%s\"\n", name);
     delete space;
-#endif
+#endif //USER_PROGRAM
 
 }
 
