@@ -14,11 +14,27 @@
 #include "addrspace.h"
 #include "synch.h"
 
+void RunUserProgram(int arg)
+{
+    currentThread->space->InitRegisters();
+    currentThread->space->RestoreState();
+    Machine *p = (Machine *)arg;
+    p->Run();
+}
 //----------------------------------------------------------------------
 // StartProcess
 // 	Run a user program.  Open the executable, load it into
 //	memory, and jump to it.
 //----------------------------------------------------------------------
+
+void newThread(char *threadName, char *filename) {
+    OpenFile *executable = fileSystem->Open(filename);
+    AddrSpace *space;
+    Thread *forked = new Thread(threadName);
+    space = new AddrSpace(executable);
+    forked->space = space;
+    forked->Fork(RunUserProgram, (int)machine);
+}
 
 void
 StartProcess(char *filename)
@@ -33,7 +49,11 @@ StartProcess(char *filename)
     space = new AddrSpace(executable);    
     currentThread->space = space;
 
-    delete executable;			// close file
+    // newThread("forked1", filename);
+    // newThread("forked2", filename);
+    // newThread("forked3", filename);
+
+    // delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values
     space->RestoreState();		// load page table register

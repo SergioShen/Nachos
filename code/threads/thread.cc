@@ -22,7 +22,12 @@
 
 #define STACK_FENCEPOST 0xdeadbeef	// this is put at the top of the
 					// execution stack, for detecting 
-					// stack overflows
+                    // stack overflows
+                    
+//----------------------------------------------------------------------
+int Thread::nextThreadID(0);
+int Thread::totalNumber(0);
+
 
 //----------------------------------------------------------------------
 // Thread::Thread
@@ -32,12 +37,28 @@
 //	"threadName" is an arbitrary string, useful for debugging.
 //----------------------------------------------------------------------
 
-Thread::Thread(char* threadName)
+Thread::Thread(char* threadName, int prior)
 {
+    if(totalNumber >= 128) {
+        printf("Trying to create too many threads.\n");
+        ASSERT(totalNumber < 128);
+    }
+
     name = threadName;
     stackTop = NULL;
     stack = NULL;
     status = JUST_CREATED;
+    userID = 1001;
+    threadID = nextThreadID;
+    nextThreadID++;
+    priority = prior;
+    timeSliceNum = 0;
+    dynamicPrior = priority;
+    DEBUG('t', "Creating thread: NAME: %s, UID: %d, TID: %d\n", name, userID, threadID);
+
+    totalNumber++;
+    DEBUG('t', "%d threads in total\n", totalNumber);
+
 #ifdef USER_PROGRAM
     space = NULL;
 #endif
@@ -59,9 +80,21 @@ Thread::~Thread()
 {
     DEBUG('t', "Deleting thread \"%s\"\n", name);
 
+    totalNumber--;
+
     ASSERT(this != currentThread);
     if (stack != NULL)
-	DeallocBoundedArray((char *) stack, StackSize * sizeof(int));
+    DeallocBoundedArray((char *) stack, StackSize * sizeof(int));
+    
+#ifdef USER_PROGRAM
+#ifdef USE_INVERTED_TABLE
+    // Clear physical page
+    machine->RecycleMemory(this->threadID);
+#endif //USE_INVERTED_TABLE
+    DEBUG('t', "Deleting address space of thread \"%s\"\n", name);
+    delete space;
+#endif //USER_PROGRAM
+
 }
 
 //----------------------------------------------------------------------
@@ -96,6 +129,9 @@ Thread::Fork(VoidFunctionPtr func, int arg)
     scheduler->ReadyToRun(this);	// ReadyToRun assumes that interrupts 
 					// are disabled!
     (void) interrupt->SetLevel(oldLevel);
+    
+    if(currentThread->getPriority() > this->priority)
+        currentThread->Yield();
 }    
 
 //----------------------------------------------------------------------
