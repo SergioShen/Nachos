@@ -12,6 +12,6 @@ code/test/matmult
 code/test/shell
 code/test/sort
 
-code/filesys/DISK
+**/DISK
 
 nachos.ps
