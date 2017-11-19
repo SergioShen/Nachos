@@ -229,7 +229,9 @@ void FileHeader::PrintContent() {
 void
 FileHeader::Print()
 {
-    printf("FileHeader contents.  File size: %d.  File blocks:\n", numBytes);
+    printf("FileHeader contents:\n");
+    printf("File size: %d\nCreate Time: %sLast Access Time: %sLast Modify Time: %s", numBytes, ctime(&createTime), ctime(&lastAccessTime), ctime(&lastModifyTime));
+    printf("File blocks:\n");
     PrintBlocks();
     if(nextSectorOfHeader != -1) {
         FileHeader *extraHdr = new FileHeader;

@@ -142,6 +142,8 @@ OpenFile::ReadAt(char *into, int numBytes, int position)
     // copy the part we want
     bcopy(&buf[position - (firstSector * SectorSize)], into, numBytes);
     delete [] buf;
+    hdr->UpdateAccessTime();
+    WriteBackHeader();
     return numBytes;
 }
 
@@ -187,6 +189,9 @@ OpenFile::WriteAt(char *from, int numBytes, int position)
         synchDisk->WriteSector(hdr->ByteToSector(i * SectorSize), 
 					&buf[(i - firstSector) * SectorSize]);
     delete [] buf;
+    hdr->UpdateAccessTime();
+    hdr->UpdateModifyTime();
+    WriteBackHeader();
     return numBytes;
 }
 

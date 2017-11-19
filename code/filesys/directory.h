@@ -18,7 +18,6 @@
 #define DIRECTORY_H
 
 #include "openfile.h"
-#include <time.h>
 
 #define FileNameMaxLen 		9	// for simplicity, we assume 
 					// file names are <= 9 characters long
@@ -37,9 +36,6 @@ class DirectoryEntry {
     bool isDirectory;
     int sector;				// Location on disk to find the 
 					//   FileHeader for this file
-    time_t createTime;
-    time_t lastAccessTime;
-    time_t lastModifyTime;
     char name[FileNameMaxLen + 1];	// Text name for file, with +1 for 
 					// the trailing '\0'
 };

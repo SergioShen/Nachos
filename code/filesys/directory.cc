@@ -200,9 +200,6 @@ Directory::RecursivelyAdd(char *name, char *fullPath, int newSector, bool isDire
             if (!table[i].inUse) {
                 table[i].inUse = TRUE;
                 table[i].isDirectory = isDirectory;
-                time(&table[i].createTime);
-                time(&table[i].lastAccessTime);
-                time(&table[i].lastModifyTime);
                 strncpy(table[i].name, name, FileNameMaxLen); 
                 table[i].sector = newSector;
                 DEBUG('f', "Allocate %s header at sector %d\n", name, newSector);
