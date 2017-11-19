@@ -61,7 +61,6 @@
 // supports extensible files, the directory size sets the maximum number 
 // of files that can be loaded onto the disk.
 #define FreeMapFileSize 	(NumSectors / BitsInByte)
-#define NumDirEntries 		10
 #define DirectoryFileSize 	(sizeof(DirectoryEntry) * NumDirEntries)
 
 //----------------------------------------------------------------------
@@ -179,6 +178,7 @@ FileSystem::Create(char *name, int initialSize)
     FileHeader *hdr;
     int sector;
     bool success;
+    bool isDirectory = name[strlen(name) - 1] == '/';
 
     DEBUG('f', "Creating file %s, size %d\n", name, initialSize);
 
@@ -202,9 +202,20 @@ FileSystem::Create(char *name, int initialSize)
 	    else {	
 	    	success = TRUE;
 		// everthing worked, flush all changes back to disk
+                hdr->UpdateCreateTime();
+                hdr->UpdateAccessTime();
+                hdr->UpdateModifyTime();
     	    	hdr->WriteBack(sector); 		
-    	    	directory->WriteBack(directoryFile);
+                directory->WriteBack(directoryFile);
     	    	freeMap->WriteBack(freeMapFile);
+                if(isDirectory) {
+                    DEBUG('f', "Allocate space for directory %s\n", name);
+                    Directory *newDirectory = new Directory(NumDirEntries);
+                    OpenFile *newDirectoryFile = new OpenFile(sector);
+                    newDirectory->WriteBack(newDirectoryFile);
+                    delete newDirectory;
+                    delete newDirectoryFile;
+                }
 	    }
             delete hdr;
 	}
@@ -339,3 +350,15 @@ FileSystem::Print()
     delete freeMap;
     delete directory;
 } 
+
+bool FileSystem::Reallocate(FileHeader *hdr, int newFileSize) {
+    BitMap *freeMap = new BitMap(NumSectors);
+    freeMap->FetchFrom(freeMapFile);
+    bool result = hdr->Reallocate(freeMap, newFileSize);
+    if(!result) {
+        DEBUG('f', "Unable to reallocate file size %d\n", newFileSize);
+        return FALSE;
+    }
+    freeMap->WriteBack(freeMapFile);
+    return TRUE;
+}
