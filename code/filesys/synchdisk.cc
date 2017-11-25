@@ -45,6 +45,9 @@ SynchDisk::SynchDisk(char* name)
     semaphore = new Semaphore("synch disk", 0);
     lock = new Lock("synch disk lock");
     disk = new Disk(name, DiskRequestDone, (int) this);
+    sectorLock = new Lock*[NumSectors];
+    for(int i = 0; i < NumSectors; i++)
+        sectorLock[i] = new Lock("synch disk sector lock");
 }
 
 //----------------------------------------------------------------------
@@ -106,4 +109,12 @@ void
 SynchDisk::RequestDone()
 { 
     semaphore->V();
+}
+
+void SynchDisk::SectorLock(int sector) {
+    sectorLock[sector]->Acquire();
+}
+
+void SynchDisk::SectorUnlock(int sector) {
+    sectorLock[sector]->Release();
 }

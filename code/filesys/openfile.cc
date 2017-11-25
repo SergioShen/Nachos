@@ -118,6 +118,8 @@ OpenFile::Write(char *into, int numBytes)
 int
 OpenFile::ReadAt(char *into, int numBytes, int position)
 {
+    synchDisk->SectorLock(sectorOfHeader);
+
     int fileLength = hdr->FileLength();
     int i, firstSector, lastSector, numSectors;
     char *buf;
@@ -144,12 +146,16 @@ OpenFile::ReadAt(char *into, int numBytes, int position)
     delete [] buf;
     hdr->UpdateAccessTime();
     WriteBackHeader();
+
+    synchDisk->SectorUnlock(sectorOfHeader);
     return numBytes;
 }
 
 int
 OpenFile::WriteAt(char *from, int numBytes, int position)
 {
+    synchDisk->SectorLock(sectorOfHeader);
+
     int fileLength = hdr->FileLength();
     int i, firstSector, lastSector, numSectors;
     bool firstAligned, lastAligned;
@@ -192,6 +198,8 @@ OpenFile::WriteAt(char *from, int numBytes, int position)
     hdr->UpdateAccessTime();
     hdr->UpdateModifyTime();
     WriteBackHeader();
+
+    synchDisk->SectorUnlock(sectorOfHeader);
     return numBytes;
 }
 
