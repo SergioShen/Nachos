@@ -19,7 +19,7 @@
 
 #include "openfile.h"
 
-#define FileNameMaxLen 		9	// for simplicity, we assume 
+#define FileNameMaxLen 		24	// for simplicity, we assume 
 					// file names are <= 9 characters long
 #define NumDirEntries 		10
 
