@@ -230,7 +230,7 @@ void
 FileHeader::Print()
 {
     printf("FileHeader contents:\n");
-    printf("File size: %d\nCreate Time: %sLast Access Time: %sLast Modify Time: %s", numBytes, ctime(&createTime), ctime(&lastAccessTime), ctime(&lastModifyTime));
+    printf("File size: %d, Reference Num: %d\nCreate Time: %sLast Access Time: %sLast Modify Time: %s", numBytes, numRef, ctime(&createTime), ctime(&lastAccessTime), ctime(&lastModifyTime));
     printf("File blocks:\n");
     PrintBlocks();
     if(nextSectorOfHeader != -1) {

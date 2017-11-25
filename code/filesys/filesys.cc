@@ -50,6 +50,7 @@
 #include "directory.h"
 #include "filehdr.h"
 #include "filesys.h"
+#include "system.h"
 
 // Sectors containing the file headers for the bitmap of free sectors,
 // and the directory of files.  These file headers are placed in well-known 
@@ -136,6 +137,14 @@ FileSystem::FileSystem(bool format)
     } else {
     // if we are not formatting the disk, just open the files representing
     // the bitmap and directory; these are left open while Nachos is running
+        FileHeader *mapHdr = new FileHeader;
+        FileHeader *dirHdr = new FileHeader;
+        mapHdr->FetchFrom(FreeMapSector);
+        dirHdr->FetchFrom(DirectorySector);
+        mapHdr->InitRef();
+        dirHdr->InitRef();
+        mapHdr->WriteBack(FreeMapSector);
+        dirHdr->WriteBack(DirectorySector);
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
     }
@@ -202,6 +211,7 @@ FileSystem::Create(char *name, int initialSize)
 	    else {	
 	    	success = TRUE;
 		// everthing worked, flush all changes back to disk
+                hdr->InitRef();
                 hdr->UpdateCreateTime();
                 hdr->UpdateAccessTime();
                 hdr->UpdateModifyTime();
@@ -281,7 +291,15 @@ FileSystem::Remove(char *name)
        return FALSE;			 // file not found 
     }
     fileHdr = new FileHeader;
+    synchDisk->SectorLock(sector);
     fileHdr->FetchFrom(sector);
+    if(fileHdr->getNumRef() != 0) {
+        DEBUG('f', "File %s is referenced by other threads\n", name);
+        delete directory;
+        delete fileHdr;
+        synchDisk->SectorUnlock(sector);
+        return FALSE;
+    }
 
     freeMap = new BitMap(NumSectors);
     freeMap->FetchFrom(freeMapFile);
@@ -295,6 +313,7 @@ FileSystem::Remove(char *name)
     delete fileHdr;
     delete directory;
     delete freeMap;
+    synchDisk->SectorUnlock(sector);
     return TRUE;
 } 
 
