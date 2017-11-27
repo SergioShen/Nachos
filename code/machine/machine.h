@@ -25,6 +25,7 @@
 #include "utility.h"
 #include "translate.h"
 #include "disk.h"
+#include "bitmap.h"
 
 // Definitions related to the size, and format of user memory
 
@@ -89,6 +90,13 @@ class Instruction {
     char rs, rt, rd; // Three registers from instruction.
     int extra;       // Immediate or target or shamt field or offset.
                      // Immediates are sign-extended.
+};
+
+class SwapAreaEntry {
+public:
+    TranslationEntry entry;
+    char content[PageSize];
+    SwapAreaEntry *next;
 };
 
 // The following class defines the simulated host workstation hardware, as 
@@ -178,10 +186,21 @@ class Machine {
 
     TranslationEntry *tlb;		// this pointer should be considered 
 					// "read-only" to Nachos kernel code
+	int nextVictim;
+	int totalMiss;
 
     TranslationEntry *pageTable;
-    unsigned int pageTableSize;
-
+	unsigned int pageTableSize;
+	
+	BitMap *memUseage;
+	
+#ifdef USE_INVERTED_TABLE
+	TranslationEntry *invertedPageTable;
+	TranslationEntry **hashTable;
+	SwapAreaEntry *swapArea;
+	int swapAreaSize;
+	void RecycleMemory(int threadID);
+#endif
   private:
     bool singleStep;		// drop back into the debugger after each
 				// simulated instruction

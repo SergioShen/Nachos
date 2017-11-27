@@ -19,8 +19,9 @@
 
 #include "openfile.h"
 
-#define FileNameMaxLen 		9	// for simplicity, we assume 
+#define FileNameMaxLen 		24	// for simplicity, we assume 
 					// file names are <= 9 characters long
+#define NumDirEntries 		10
 
 // The following class defines a "directory entry", representing a file
 // in the directory.  Each entry gives the name of the file, and where
@@ -32,8 +33,9 @@
 class DirectoryEntry {
   public:
     bool inUse;				// Is this directory entry in use?
+    bool isDirectory;
     int sector;				// Location on disk to find the 
-					//   FileHeader for this file 
+					//   FileHeader for this file
     char name[FileNameMaxLen + 1];	// Text name for file, with +1 for 
 					// the trailing '\0'
 };
@@ -78,6 +80,11 @@ class Directory {
 
     int FindIndex(char *name);		// Find the index into the directory 
 					//  table corresponding to "name"
+    int RecursivelyFind(char *name, char *fullPath);
+    bool RecursivelyAdd(char *name, char *fullPath, int newSector, bool isDirectory);
+    bool RecursivelyRemove(char *name, char *fullPath);
+    void RecursivelyList(int layer);
+    void RecursivelyPrint(char *currentPath);
 };
 
 #endif // DIRECTORY_H

@@ -41,6 +41,10 @@ class SynchDisk {
     void RequestDone();			// Called by the disk device interrupt
 					// handler, to signal that the
 					// current disk operation is complete.
+    void SectorLock(int sector);
+    void SectorUnlock(int sector);
+    Lock **sectorLock;
+    Condition *condition;
 
   private:
     Disk *disk;		  		// Raw disk device

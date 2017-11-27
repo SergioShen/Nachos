@@ -29,8 +29,14 @@
 
 OpenFile::OpenFile(int sector)
 { 
+    sectorOfHeader = sector;
     hdr = new FileHeader;
+    synchDisk->SectorLock(sectorOfHeader);
     hdr->FetchFrom(sector);
+    hdr->IncreaseRef();
+    DEBUG('f', "File open %d\n", hdr->getNumRef());
+    hdr->WriteBack(sector);
+    synchDisk->SectorUnlock(sectorOfHeader);
     seekPosition = 0;
 }
 
@@ -41,6 +47,12 @@ OpenFile::OpenFile(int sector)
 
 OpenFile::~OpenFile()
 {
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    hdr->DecreaseRef();
+    DEBUG('f', "File close: %d\n", hdr->getNumRef());
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->SectorUnlock(sectorOfHeader);
     delete hdr;
 }
 
@@ -74,17 +86,61 @@ OpenFile::Seek(int position)
 int
 OpenFile::Read(char *into, int numBytes)
 {
-   int result = ReadAt(into, numBytes, seekPosition);
-   seekPosition += result;
-   return result;
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    int result = ReadAt(into, numBytes, seekPosition);
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->SectorUnlock(sectorOfHeader);
+    seekPosition += result;
+    return result;
 }
 
 int
 OpenFile::Write(char *into, int numBytes)
 {
-   int result = WriteAt(into, numBytes, seekPosition);
-   seekPosition += result;
-   return result;
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    int result = WriteAt(into, numBytes, seekPosition);
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->SectorUnlock(sectorOfHeader);
+    seekPosition += result;
+    return result;
+}
+
+int OpenFile::PipeInit() {
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    hdr->SetNumBytes(0);
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->SectorUnlock(sectorOfHeader);
+}
+
+int OpenFile::PipeRead(char *into) {
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    int fileLength = hdr->FileLength();
+    while(fileLength == 0) {
+        synchDisk->condition->Wait(synchDisk->sectorLock[sectorOfHeader]);
+        hdr->FetchFrom(sectorOfHeader);
+        fileLength = hdr->FileLength();
+    }
+    int result = ReadAt(into, fileLength, 0);
+    hdr->SetNumBytes(0);
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->SectorUnlock(sectorOfHeader);
+    return result;
+}
+
+int OpenFile::PipeWrite(char *into, int numBytes) {
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    int oldFileLength = hdr->FileLength();
+    int result = WriteAt(into, numBytes, oldFileLength);
+    hdr->SetNumBytes(oldFileLength + result);
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->condition->Signal(synchDisk->sectorLock[sectorOfHeader]);
+    synchDisk->SectorUnlock(sectorOfHeader);
+    return result;
 }
 
 //----------------------------------------------------------------------
@@ -140,6 +196,7 @@ OpenFile::ReadAt(char *into, int numBytes, int position)
     // copy the part we want
     bcopy(&buf[position - (firstSector * SectorSize)], into, numBytes);
     delete [] buf;
+    hdr->UpdateAccessTime();
     return numBytes;
 }
 
@@ -151,10 +208,12 @@ OpenFile::WriteAt(char *from, int numBytes, int position)
     bool firstAligned, lastAligned;
     char *buf;
 
-    if ((numBytes <= 0) || (position >= fileLength))
+    if (numBytes <= 0)
 	return 0;				// check request
-    if ((position + numBytes) > fileLength)
-	numBytes = fileLength - position;
+    if ((position + numBytes) > fileLength) {
+        if(!fileSystem->Reallocate(hdr, position + numBytes))
+            return 0;
+    }
     DEBUG('f', "Writing %d bytes at %d, from file of length %d.\n", 	
 			numBytes, position, fileLength);
 
@@ -182,6 +241,8 @@ OpenFile::WriteAt(char *from, int numBytes, int position)
         synchDisk->WriteSector(hdr->ByteToSector(i * SectorSize), 
 					&buf[(i - firstSector) * SectorSize]);
     delete [] buf;
+    hdr->UpdateAccessTime();
+    hdr->UpdateModifyTime();
     return numBytes;
 }
 
@@ -193,5 +254,6 @@ OpenFile::WriteAt(char *from, int numBytes, int position)
 int
 OpenFile::Length() 
 { 
+    hdr->FetchFrom(sectorOfHeader);
     return hdr->FileLength(); 
 }

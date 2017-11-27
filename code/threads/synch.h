@@ -80,6 +80,8 @@ class Lock {
   private:
     char* name;				// for debugging
     // plus some other stuff you'll need to define
+    Semaphore *sema;
+    Thread *thread;
 };
 
 // The following class defines a "condition variable".  A condition
@@ -132,5 +134,61 @@ class Condition {
   private:
     char* name;
     // plus some other stuff you'll need to define
+    List *queue;
 };
+
+// The following class defines a barrier. A barrier make current thread
+// sleep until all synchronized threads reach the same point. There is
+// only one operation on Barrier:
+//
+//  Wait() -- Relinquish the CPU until the number of blocked threads reach
+//    *threadNumber*, then wake up all blocked threads
+//
+class Barrier {
+  public:
+    Barrier(char *debugName, int threadNumber);
+    ~Barrier();
+    char *getName() { return name; }
+
+    void Wait();
+
+  private:
+    char *name;
+    int targetNumber;
+    int currentNumber;
+    Lock *lock;
+    Condition *condition;
+};
+
+// The following class defines a reader-writer lock. A reader-writer lock
+// allows several readers to read data concurrently. But once a writer get
+// the lock, other readers or writers will be blocked. There are 4 operations
+// on reader-writer lock:
+//
+//  ReaderAcqui() -- Increase the reader count. Call P() operation of *write*
+//    semaphore if caller thread is the first reader.
+//  
+//  ReaderV() -- Decrease the reader count. Call V() operation of *write*
+//    semaphore if caller thread is the last reader.
+// 
+//  WriterP() -- Call P() operation of *write* semaphore
+//
+//  WriterV() -- Call V() operation of *write* semaphore
+//
+class ReadWriteLock {
+  public:
+    ReadWriteLock(char* debugName);
+    ~ReadWriteLock();
+    char *getName() { return name; }
+    void ReaderAcquire();
+    void ReaderRelease();
+    void WriterAcquire();
+    void WriterRelease();
+
+  private:
+    char *name;
+    Lock *write;
+    int readerNumber;
+};
+
 #endif // SYNCH_H

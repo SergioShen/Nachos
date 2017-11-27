@@ -18,7 +18,6 @@
 #include "copyright.h"
 #include "system.h"
 #include "addrspace.h"
-#include "noff.h"
 #ifdef HOST_SPARC
 #include <strings.h>
 #endif
@@ -30,7 +29,7 @@
 //	endian machine, and we're now running on a big endian machine.
 //----------------------------------------------------------------------
 
-static void 
+void 
 SwapHeader (NoffHeader *noffH)
 {
 	noffH->noffMagic = WordToHost(noffH->noffMagic);
@@ -62,6 +61,7 @@ SwapHeader (NoffHeader *noffH)
 
 AddrSpace::AddrSpace(OpenFile *executable)
 {
+    this->executable = executable;
     NoffHeader noffH;
     unsigned int i, size;
 
@@ -77,45 +77,26 @@ AddrSpace::AddrSpace(OpenFile *executable)
 						// to leave room for the stack
     numPages = divRoundUp(size, PageSize);
     size = numPages * PageSize;
-
+    
+#ifdef USE_INVERTED_TABLE
+#else
     ASSERT(numPages <= NumPhysPages);		// check we're not trying
 						// to run anything too big --
 						// at least until we have
-						// virtual memory
+                        // virtual memory
+#endif
 
     DEBUG('a', "Initializing address space, num pages %d, size %d\n", 
 					numPages, size);
 // first, set up the translation 
+#ifdef USE_INVERTED_TABLE
+#else
     pageTable = new TranslationEntry[numPages];
     for (i = 0; i < numPages; i++) {
-	pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
-	pageTable[i].physicalPage = i;
-	pageTable[i].valid = TRUE;
-	pageTable[i].use = FALSE;
-	pageTable[i].dirty = FALSE;
-	pageTable[i].readOnly = FALSE;  // if the code segment was entirely on 
-					// a separate page, we could set its 
-					// pages to be read-only
+        pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
+        pageTable[i].valid = FALSE;
     }
-    
-// zero out the entire address space, to zero the unitialized data segment 
-// and the stack segment
-    bzero(machine->mainMemory, size);
-
-// then, copy in the code and data segments into memory
-    if (noffH.code.size > 0) {
-        DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
-			noffH.code.virtualAddr, noffH.code.size);
-        executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]),
-			noffH.code.size, noffH.code.inFileAddr);
-    }
-    if (noffH.initData.size > 0) {
-        DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", 
-			noffH.initData.virtualAddr, noffH.initData.size);
-        executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
-			noffH.initData.size, noffH.initData.inFileAddr);
-    }
-
+#endif
 }
 
 //----------------------------------------------------------------------
@@ -125,7 +106,17 @@ AddrSpace::AddrSpace(OpenFile *executable)
 
 AddrSpace::~AddrSpace()
 {
-   delete pageTable;
+#ifdef USE_INVERTED_TABLE
+#else
+    for(int i = 0; i < numPages; i++) {
+        if(pageTable[i].valid) {
+            DEBUG('v', "Clear physical page #%d\n", pageTable[i].physicalPage);
+            machine->memUseage->Clear(pageTable[i].physicalPage);
+        }
+    }
+    delete pageTable;
+#endif
+    delete executable;
 }
 
 //----------------------------------------------------------------------
@@ -169,7 +160,19 @@ AddrSpace::InitRegisters()
 //----------------------------------------------------------------------
 
 void AddrSpace::SaveState() 
-{}
+{
+    // Make TLB invalid on a context switch
+    for(int i = 0; i < TLBSize; i++) {
+#ifdef USE_INVERTED_TABLE
+        TranslationEntry *next = machine->invertedPageTable[machine->tlb[i].physicalPage].next;
+        machine->invertedPageTable[machine->tlb[i].physicalPage] = machine->tlb[i];
+        machine->invertedPageTable[machine->tlb[i].physicalPage].next = next;
+#else
+        machine->pageTable[machine->tlb[i].virtualPage] = machine->tlb[i];
+#endif
+        machine->tlb[i].valid = false;
+    }
+}
 
 //----------------------------------------------------------------------
 // AddrSpace::RestoreState

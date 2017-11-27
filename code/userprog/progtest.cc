@@ -10,15 +10,31 @@
 
 #include "copyright.h"
 #include "system.h"
-#include "console.h"
+#include "synchconsole.h"
 #include "addrspace.h"
 #include "synch.h"
 
+void RunUserProgram(int arg)
+{
+    currentThread->space->InitRegisters();
+    currentThread->space->RestoreState();
+    Machine *p = (Machine *)arg;
+    p->Run();
+}
 //----------------------------------------------------------------------
 // StartProcess
 // 	Run a user program.  Open the executable, load it into
 //	memory, and jump to it.
 //----------------------------------------------------------------------
+
+void newThread(char *threadName, char *filename) {
+    OpenFile *executable = fileSystem->Open(filename);
+    AddrSpace *space;
+    Thread *forked = new Thread(threadName);
+    space = new AddrSpace(executable);
+    forked->space = space;
+    forked->Fork(RunUserProgram, (int)machine);
+}
 
 void
 StartProcess(char *filename)
@@ -33,7 +49,11 @@ StartProcess(char *filename)
     space = new AddrSpace(executable);    
     currentThread->space = space;
 
-    delete executable;			// close file
+    // newThread("forked1", filename);
+    // newThread("forked2", filename);
+    // newThread("forked3", filename);
+
+    // delete executable;			// close file
 
     space->InitRegisters();		// set the initial register values
     space->RestoreState();		// load page table register
@@ -47,18 +67,7 @@ StartProcess(char *filename)
 // Data structures needed for the console test.  Threads making
 // I/O requests wait on a Semaphore to delay until the I/O completes.
 
-static Console *console;
-static Semaphore *readAvail;
-static Semaphore *writeDone;
-
-//----------------------------------------------------------------------
-// ConsoleInterruptHandlers
-// 	Wake up the thread that requested the I/O.
-//----------------------------------------------------------------------
-
-static void ReadAvail(int arg) { readAvail->V(); }
-static void WriteDone(int arg) { writeDone->V(); }
-
+static SynchConsole *console;
 //----------------------------------------------------------------------
 // ConsoleTest
 // 	Test the console by echoing characters typed at the input onto
@@ -70,15 +79,11 @@ ConsoleTest (char *in, char *out)
 {
     char ch;
 
-    console = new Console(in, out, ReadAvail, WriteDone, 0);
-    readAvail = new Semaphore("read avail", 0);
-    writeDone = new Semaphore("write done", 0);
-    
+    console = new SynchConsole(in, out);
+    printf("*** Use SynchConsole ***\n");
     for (;;) {
-	readAvail->P();		// wait for character to arrive
 	ch = console->GetChar();
 	console->PutChar(ch);	// echo it!
-	writeDone->P() ;        // wait for write to finish
 	if (ch == 'q') return;  // if q, quit
     }
 }

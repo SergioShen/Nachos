@@ -76,6 +76,10 @@ class OpenFile {
 					// and increment position in file.
     int Write(char *from, int numBytes);
 
+		int PipeInit();
+		int PipeRead(char *into);
+		int PipeWrite(char *from, int numBytes);
+
     int ReadAt(char *into, int numBytes, int position);
     					// Read/write bytes from the file,
 					// bypassing the implicit position.
@@ -84,11 +88,11 @@ class OpenFile {
     int Length(); 			// Return the number of bytes in the
 					// file (this interface is simpler 
 					// than the UNIX idiom -- lseek to 
-					// end of file, tell, lseek back 
-    
+					// end of file, tell, lseek back
   private:
     FileHeader *hdr;			// Header for this file 
     int seekPosition;			// Current position within the file
+		int sectorOfHeader;
 };
 
 #endif // FILESYS
