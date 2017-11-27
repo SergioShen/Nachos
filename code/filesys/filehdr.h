@@ -66,6 +66,7 @@ class FileHeader {
     void IncreaseRef() { numRef++; }
     void DecreaseRef() { numRef--; }
     int getNumRef() { return numRef; }
+    void SetNumBytes(int bytes) { numBytes = bytes; }
 
   private:
     time_t createTime;

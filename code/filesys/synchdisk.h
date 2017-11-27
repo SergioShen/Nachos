@@ -43,6 +43,8 @@ class SynchDisk {
 					// current disk operation is complete.
     void SectorLock(int sector);
     void SectorUnlock(int sector);
+    Lock **sectorLock;
+    Condition *condition;
 
   private:
     Disk *disk;		  		// Raw disk device
@@ -50,7 +52,6 @@ class SynchDisk {
 					// with the interrupt handler
     Lock *lock;		  		// Only one read/write request
 					// can be sent to the disk at a time
-    Lock **sectorLock;
 };
 
 #endif // SYNCHDISK_H

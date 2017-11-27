@@ -76,6 +76,10 @@ class OpenFile {
 					// and increment position in file.
     int Write(char *from, int numBytes);
 
+		int PipeInit();
+		int PipeRead(char *into);
+		int PipeWrite(char *from, int numBytes);
+
     int ReadAt(char *into, int numBytes, int position);
     					// Read/write bytes from the file,
 					// bypassing the implicit position.

@@ -20,6 +20,8 @@
 #include "thread.h"
 #include "disk.h"
 #include "stats.h"
+#include <unistd.h>
+#include <fcntl.h>
 
 #define TransferSize 	10 	// make it small, just to be difficult
 
@@ -214,17 +216,58 @@ void WriteThread(int arg) {
     delete openFile;
 }
 
-void PerformanceTest() {
-    OpenFile *openFile = fileSystem->Open(FileName);
-    int bytes = 0, times = 0;
+// void PerformanceTest() {
+//     OpenFile *openFile = fileSystem->Open(FileName);
+//     int bytes = 0, times = 0;
 
-    for(int i = 0; i < 8; i++) {
-        times++;
-        bytes = openFile->Write(Contents, ContentSize);
+//     for(int i = 0; i < 8; i++) {
+//         times++;
+//         bytes = openFile->Write(Contents, ContentSize);
+//     }
+//     delete openFile;
+
+//     Thread *thread1 = new Thread("forked 1"), *thread2 = new Thread("forked 2");
+//     thread1->Fork(ReadThread, 1);
+//     thread2->Fork(WriteThread, 2);
+// }
+
+void InputThread(int arg) {
+    OpenFile *pipe = new OpenFile(2);
+    char buffer[128];
+    int fd = open("/dev/tty", O_RDONLY|O_NONBLOCK);
+    for(;;) {
+        int n = read(fd, buffer, 128);
+        if(n > 0) {
+            for(int i = 0; i < n; i ++) {
+                pipe->PipeWrite(buffer + i, 1);
+                if(buffer[i] == 'q')
+                    goto end;
+            }
+        }
+        currentThread->Yield();
     }
-    delete openFile;
+end:
+    delete pipe;
+}
 
-    Thread *thread1 = new Thread("forked 1"), *thread2 = new Thread("forked 2");
-    thread1->Fork(ReadThread, 1);
-    thread2->Fork(WriteThread, 2);
+void OutputThread(int arg) {
+    OpenFile *pipe = new OpenFile(2);
+    char buffer[128];
+    for(;;) {
+        int result = pipe->PipeRead(buffer);
+        buffer[result] = '\0';
+        printf("%s", buffer);
+        if(strchr(buffer, 'q') != NULL) {
+            printf("\n");
+            currentThread->Finish();
+        }
+        currentThread->Yield();
+    }
+    delete pipe;
+}
+
+void PerformanceTest() {
+    Thread *thread = new Thread("forked");
+    thread->Fork(OutputThread, 0);
+    InputThread(0);
 }

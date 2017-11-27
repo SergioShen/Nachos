@@ -67,7 +67,7 @@ FileHeader::Allocate(BitMap *freeMap, int fileSize)
 
 bool FileHeader::Reallocate(BitMap *freeMap, int newFileSize) {
     int newNumSectors = divRoundUp(newFileSize, SectorSize);
-    if(newNumSectors == numSectors) {
+    if(newNumSectors <= numSectors) {
         numBytes = newFileSize;
         return TRUE; // Do not need extend
     }

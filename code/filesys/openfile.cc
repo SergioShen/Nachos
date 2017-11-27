@@ -107,6 +107,42 @@ OpenFile::Write(char *into, int numBytes)
     return result;
 }
 
+int OpenFile::PipeInit() {
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    hdr->SetNumBytes(0);
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->SectorUnlock(sectorOfHeader);
+}
+
+int OpenFile::PipeRead(char *into) {
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    int fileLength = hdr->FileLength();
+    while(fileLength == 0) {
+        synchDisk->condition->Wait(synchDisk->sectorLock[sectorOfHeader]);
+        hdr->FetchFrom(sectorOfHeader);
+        fileLength = hdr->FileLength();
+    }
+    int result = ReadAt(into, fileLength, 0);
+    hdr->SetNumBytes(0);
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->SectorUnlock(sectorOfHeader);
+    return result;
+}
+
+int OpenFile::PipeWrite(char *into, int numBytes) {
+    synchDisk->SectorLock(sectorOfHeader);
+    hdr->FetchFrom(sectorOfHeader);
+    int oldFileLength = hdr->FileLength();
+    int result = WriteAt(into, numBytes, oldFileLength);
+    hdr->SetNumBytes(oldFileLength + result);
+    hdr->WriteBack(sectorOfHeader);
+    synchDisk->condition->Signal(synchDisk->sectorLock[sectorOfHeader]);
+    synchDisk->SectorUnlock(sectorOfHeader);
+    return result;
+}
+
 //----------------------------------------------------------------------
 // OpenFile::ReadAt/WriteAt
 // 	Read/write a portion of a file, starting at "position".

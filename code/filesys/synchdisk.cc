@@ -48,6 +48,7 @@ SynchDisk::SynchDisk(char* name)
     sectorLock = new Lock*[NumSectors];
     for(int i = 0; i < NumSectors; i++)
         sectorLock[i] = new Lock("synch disk sector lock");
+    condition = new Condition("pipe");
 }
 
 //----------------------------------------------------------------------
