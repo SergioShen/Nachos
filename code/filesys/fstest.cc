@@ -20,6 +20,8 @@
 #include "thread.h"
 #include "disk.h"
 #include "stats.h"
+#include <unistd.h>
+#include <fcntl.h>
 
 #define TransferSize 	10 	// make it small, just to be difficult
 
@@ -60,7 +62,7 @@ Copy(char *from, char *to)
     
 // Copy the data in TransferSize chunks
     buffer = new char[TransferSize];
-    while ((amountRead = fread(buffer, sizeof(char), TransferSize, fp)) > 0)
+    while ((amountRead = fread(buffer, sizeof(char), TransferSize, fp)) > 0) 
 	openFile->Write(buffer, amountRead);	
     delete [] buffer;
 
@@ -110,6 +112,7 @@ Print(char *name)
 
 #define FileName 	"TestFile"
 #define Contents 	"1234567890"
+#define NewContents "abcdefghij"
 #define ContentSize 	strlen(Contents)
 #define FileSize 	((int)(ContentSize * 5000))
 
@@ -169,17 +172,102 @@ FileRead()
     delete openFile;	// close file
 }
 
-void
-PerformanceTest()
-{
-    printf("Starting file system performance test:\n");
-    stats->Print();
-    FileWrite();
-    FileRead();
-    if (!fileSystem->Remove(FileName)) {
-      printf("Perf test: unable to remove %s\n", FileName);
-      return;
+// void
+// PerformanceTest()
+// {
+//     printf("Starting file system performance test:\n");
+//     stats->Print();
+//     FileWrite();
+//     FileRead();
+//     if (!fileSystem->Remove(FileName)) {
+//       printf("Perf test: unable to remove %s\n", FileName);
+//       return;
+//     }
+//     stats->Print();
+// }
+
+void ReadThread(int arg) {
+    OpenFile *openFile = fileSystem->Open(FileName);
+    char *buffer = new char[ContentSize];
+    int bytes = 0, times = 0;
+
+    bytes = openFile->Read(buffer, ContentSize);
+    while(bytes != 0) {
+        times++;
+        buffer[bytes] = '\0';
+        printf("Thread %d read %d times: %s\n", arg, times, buffer);
+        bytes = openFile->Read(buffer, ContentSize);
     }
-    stats->Print();
+    fileSystem->Print();
+    delete buffer;
+    delete openFile;
 }
 
+void WriteThread(int arg) {
+    OpenFile *openFile = fileSystem->Open(FileName);
+    int bytes = 0, times = 0;
+
+    for(int i = 0; i < 8; i++) {
+        times++;
+        bytes = openFile->Write(NewContents, ContentSize);
+        printf("Thread %d write %d times: %s\n", arg, times, NewContents);
+    }
+    fileSystem->Print();
+    delete openFile;
+}
+
+// void PerformanceTest() {
+//     OpenFile *openFile = fileSystem->Open(FileName);
+//     int bytes = 0, times = 0;
+
+//     for(int i = 0; i < 8; i++) {
+//         times++;
+//         bytes = openFile->Write(Contents, ContentSize);
+//     }
+//     delete openFile;
+
+//     Thread *thread1 = new Thread("forked 1"), *thread2 = new Thread("forked 2");
+//     thread1->Fork(ReadThread, 1);
+//     thread2->Fork(WriteThread, 2);
+// }
+
+void InputThread(int arg) {
+    OpenFile *pipe = new OpenFile(2);
+    char buffer[128];
+    int fd = open("/dev/tty", O_RDONLY|O_NONBLOCK);
+    for(;;) {
+        int n = read(fd, buffer, 128);
+        if(n > 0) {
+            for(int i = 0; i < n; i ++) {
+                pipe->PipeWrite(buffer + i, 1);
+                if(buffer[i] == 'q')
+                    goto end;
+            }
+        }
+        currentThread->Yield();
+    }
+end:
+    delete pipe;
+}
+
+void OutputThread(int arg) {
+    OpenFile *pipe = new OpenFile(2);
+    char buffer[128];
+    for(;;) {
+        int result = pipe->PipeRead(buffer);
+        buffer[result] = '\0';
+        printf("%s", buffer);
+        if(strchr(buffer, 'q') != NULL) {
+            printf("\n");
+            currentThread->Finish();
+        }
+        currentThread->Yield();
+    }
+    delete pipe;
+}
+
+void PerformanceTest() {
+    Thread *thread = new Thread("forked");
+    thread->Fork(OutputThread, 0);
+    InputThread(0);
+}

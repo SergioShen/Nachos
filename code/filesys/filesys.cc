@@ -50,12 +50,14 @@
 #include "directory.h"
 #include "filehdr.h"
 #include "filesys.h"
+#include "system.h"
 
 // Sectors containing the file headers for the bitmap of free sectors,
 // and the directory of files.  These file headers are placed in well-known 
 // sectors, so that they can be located on boot-up.
 #define FreeMapSector 		0
 #define DirectorySector 	1
+#define PipeSector          2
 
 // Initial file sizes for the bitmap and directory; until the file system
 // supports extensible files, the directory size sets the maximum number 
@@ -84,6 +86,7 @@ FileSystem::FileSystem(bool format)
         Directory *directory = new Directory(NumDirEntries);
 	FileHeader *mapHdr = new FileHeader;
 	FileHeader *dirHdr = new FileHeader;
+    FileHeader *pipeHdr = new FileHeader;
 
         DEBUG('f', "Formatting the file system.\n");
 
@@ -91,12 +94,15 @@ FileSystem::FileSystem(bool format)
     // (make sure no one else grabs these!)
 	freeMap->Mark(FreeMapSector);	    
 	freeMap->Mark(DirectorySector);
+    freeMap->Mark(PipeSector);
 
     // Second, allocate space for the data blocks containing the contents
     // of the directory and bitmap files.  There better be enough space!
 
 	ASSERT(mapHdr->Allocate(freeMap, FreeMapFileSize));
 	ASSERT(dirHdr->Allocate(freeMap, DirectoryFileSize));
+    ASSERT(pipeHdr->Allocate(freeMap, SectorSize));
+    pipeHdr->SetNumBytes(0);
 
     // Flush the bitmap and directory FileHeaders back to disk
     // We need to do this before we can "Open" the file, since open
@@ -106,6 +112,7 @@ FileSystem::FileSystem(bool format)
         DEBUG('f', "Writing headers back to disk.\n");
 	mapHdr->WriteBack(FreeMapSector);    
 	dirHdr->WriteBack(DirectorySector);
+    pipeHdr->WriteBack(PipeSector);
 
     // OK to open the bitmap and directory files now
     // The file system operations assume these two files are left open
@@ -132,10 +139,23 @@ FileSystem::FileSystem(bool format)
 	delete directory; 
 	delete mapHdr; 
 	delete dirHdr;
+    delete pipeHdr;
 	}
     } else {
     // if we are not formatting the disk, just open the files representing
     // the bitmap and directory; these are left open while Nachos is running
+        FileHeader *mapHdr = new FileHeader;
+        FileHeader *dirHdr = new FileHeader;
+        FileHeader *pipeHdr = new FileHeader;
+        mapHdr->FetchFrom(FreeMapSector);
+        dirHdr->FetchFrom(DirectorySector);
+        pipeHdr->FetchFrom(PipeSector);
+        mapHdr->InitRef();
+        dirHdr->InitRef();
+        pipeHdr->SetNumBytes(0);
+        mapHdr->WriteBack(FreeMapSector);
+        dirHdr->WriteBack(DirectorySector);
+        pipeHdr->WriteBack(PipeSector);
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
     }
@@ -202,6 +222,7 @@ FileSystem::Create(char *name, int initialSize)
 	    else {	
 	    	success = TRUE;
 		// everthing worked, flush all changes back to disk
+                hdr->InitRef();
                 hdr->UpdateCreateTime();
                 hdr->UpdateAccessTime();
                 hdr->UpdateModifyTime();
@@ -281,7 +302,15 @@ FileSystem::Remove(char *name)
        return FALSE;			 // file not found 
     }
     fileHdr = new FileHeader;
+    synchDisk->SectorLock(sector);
     fileHdr->FetchFrom(sector);
+    if(fileHdr->getNumRef() != 0) {
+        DEBUG('f', "File %s is referenced by other threads\n", name);
+        delete directory;
+        delete fileHdr;
+        synchDisk->SectorUnlock(sector);
+        return FALSE;
+    }
 
     freeMap = new BitMap(NumSectors);
     freeMap->FetchFrom(freeMapFile);
@@ -295,6 +324,7 @@ FileSystem::Remove(char *name)
     delete fileHdr;
     delete directory;
     delete freeMap;
+    synchDisk->SectorUnlock(sector);
     return TRUE;
 } 
 

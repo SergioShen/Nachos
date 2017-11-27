@@ -116,18 +116,22 @@ Lock::~Lock() {
 void Lock::Acquire() {
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
 
+    DEBUG('t', "Lock %s Acquire begin\n", getName());
     ASSERT(!isHeldByCurrentThread()); // lock can't be acquired twice by the same thread
     sema->P();
     thread = currentThread;
+    DEBUG('t', "Lock %s Acquire end\n", getName());
 
     (void) interrupt->SetLevel(oldLevel);
 }
 void Lock::Release() {
     IntStatus oldLevel = interrupt->SetLevel(IntOff);
+    DEBUG('t', "Lock %s Release begin\n", getName());
 
     ASSERT(isHeldByCurrentThread()); // only the thread holding the lock can release it
     sema->V();
     thread = NULL;
+    DEBUG('t', "Lock %s Release end\n", getName());
 
     (void) interrupt->SetLevel(oldLevel);
 }

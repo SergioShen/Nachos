@@ -18,7 +18,7 @@
 #include "bitmap.h"
 #include <time.h>
 
-#define NumDirect 	((SectorSize - 3 * sizeof(int) - 3 * sizeof(time_t)) / sizeof(int))
+#define NumDirect 	((SectorSize - 3 * sizeof(int) - 4 * sizeof(time_t)) / sizeof(int))
 #define MaxFileSize 	(NumDirect * SectorSize)
 
 // The following class defines the Nachos "file header" (in UNIX terms,  
@@ -62,11 +62,17 @@ class FileHeader {
     void UpdateCreateTime() { time(&createTime); }
     void UpdateAccessTime() { time(&lastAccessTime); }
     void UpdateModifyTime() { time(&lastModifyTime); }
+    void InitRef() { numRef = 0; }
+    void IncreaseRef() { numRef++; }
+    void DecreaseRef() { numRef--; }
+    int getNumRef() { return numRef; }
+    void SetNumBytes(int bytes) { numBytes = bytes; }
 
   private:
     time_t createTime;
     time_t lastAccessTime;
     time_t lastModifyTime;
+    int numRef;
     int numBytes;			// Number of bytes in the file
     int numSectors;			// Number of data sectors in the file
     int nextSectorOfHeader;

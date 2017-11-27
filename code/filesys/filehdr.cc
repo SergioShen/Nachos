@@ -67,7 +67,7 @@ FileHeader::Allocate(BitMap *freeMap, int fileSize)
 
 bool FileHeader::Reallocate(BitMap *freeMap, int newFileSize) {
     int newNumSectors = divRoundUp(newFileSize, SectorSize);
-    if(newNumSectors == numSectors) {
+    if(newNumSectors <= numSectors) {
         numBytes = newFileSize;
         return TRUE; // Do not need extend
     }
@@ -230,7 +230,7 @@ void
 FileHeader::Print()
 {
     printf("FileHeader contents:\n");
-    printf("File size: %d\nCreate Time: %sLast Access Time: %sLast Modify Time: %s", numBytes, ctime(&createTime), ctime(&lastAccessTime), ctime(&lastModifyTime));
+    printf("File size: %d, Reference Num: %d\nCreate Time: %sLast Access Time: %sLast Modify Time: %s", numBytes, numRef, ctime(&createTime), ctime(&lastAccessTime), ctime(&lastModifyTime));
     printf("File blocks:\n");
     PrintBlocks();
     if(nextSectorOfHeader != -1) {
