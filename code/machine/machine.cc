@@ -271,3 +271,9 @@ void Machine::RecycleMemory(int threadID) {
     }
 }
 #endif
+
+void Machine::ReturnFromSyscall() {
+    WriteRegister(PrevPCReg, registers[PCReg]);
+    WriteRegister(PCReg, registers[NextPCReg]);
+    WriteRegister(NextPCReg, registers[NextPCReg] + 4);
+}
