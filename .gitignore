@@ -11,6 +11,9 @@ code/test/halt
 code/test/matmult
 code/test/shell
 code/test/sort
+code/test/test
+code/test/exec
+code/test/fork
 
 **/DISK
 

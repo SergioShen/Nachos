@@ -299,14 +299,279 @@ int PageTableInvalidHandler(int badVAddr, unsigned int vpn) {
     return ppn;
 }
 
+void CreateSyscallHandler() {
+    currentThread->SaveUserState();
+    // First, get the length of filename
+    int fileNameBase = machine->ReadRegister(4);
+    int value;
+    int length = 0;
+    do {
+        machine->ReadMem(fileNameBase++, 1, &value);
+        length++;
+    } while(value != '\0');
+
+    // Copy filename
+    char *fileName = new char[length];
+    fileNameBase -= length; length--;
+    for(int i = 0; i < length; i++) {
+        machine->ReadMem(fileNameBase++, 1, &value);
+        fileName[i] = char(value);
+    }
+    fileName[length] = '\0';
+    DEBUG('a', "File name: %s\n", fileName);
+
+    bool result = fileSystem->Create(fileName, 0);
+
+    if(result)
+        DEBUG('a', "Create file %s done\n", fileName);
+    else
+        DEBUG('a', "Can not create file %s\n", fileName);
+    delete fileName;
+    currentThread->RestoreUserState();
+}
+
+void OpenSyscallHandler() {
+    currentThread->SaveUserState();
+    // First, get the length of filename
+    int fileNameBase = machine->ReadRegister(4);
+    int value;
+    int length = 0;
+    do {
+        machine->ReadMem(fileNameBase++, 1, &value);
+        length++;
+    } while(value != '\0');
+
+    // Copy filename
+    char *fileName = new char[length];
+    fileNameBase -= length; length--;
+    for(int i = 0; i < length; i++) {
+        machine->ReadMem(fileNameBase++, 1, &value);
+        fileName[i] = char(value);
+    }
+    fileName[length] = '\0';
+    DEBUG('a', "File name: %s\n", fileName);
+
+    OpenFile *openFile = fileSystem->Open(fileName);
+
+    if(openFile != NULL)
+        DEBUG('a', "Open file %s done\n", fileName);
+    else
+        DEBUG('a', "Can not open file %s\n", fileName);
+
+    currentThread->RestoreUserState();
+    machine->WriteRegister(2, (int)openFile);
+}
+
+void CloseSyscallHandler() {
+    currentThread->SaveUserState();
+    OpenFile *openFile = (OpenFile *)machine->ReadRegister(4);
+    DEBUG('a', "Close File\n");
+    delete openFile;
+    currentThread->RestoreUserState();
+    machine->WriteRegister(2, 0);
+}
+
+void WriteSyscallHandler() {
+    currentThread->SaveUserState();    
+    int buffer = machine->ReadRegister(4);
+    int size = machine->ReadRegister(5);
+    OpenFile *openFile = (OpenFile *)machine->ReadRegister(6);
+
+    // Copy data from user space into kernel space
+    char *kernelBuffer = new char[size + 1];
+    int value, i;
+    for(i = 0; i < size; i++) {
+        bool success = machine->ReadMem(buffer++, 1, &value);
+        if(!success) {
+            buffer--; i--;
+            continue;
+        }
+        kernelBuffer[i] = char(value);
+    }
+    kernelBuffer[i] = '\0';
+
+    // Write into file
+    int result = openFile->Write(kernelBuffer, size);
+    DEBUG('a', "Write %d bytes into file(%d bytes requested)\nContent: %s\n", result, size, kernelBuffer);
+    delete kernelBuffer;
+    currentThread->RestoreUserState();
+    machine->WriteRegister(2, result);
+}
+
+void ReadSyscallHandler() {
+    currentThread->SaveUserState();
+    int buffer = machine->ReadRegister(4);
+    int size = machine->ReadRegister(5);
+    OpenFile *openFile = (OpenFile *)machine->ReadRegister(6);
+
+    char *kernelBuffer = new char[size];
+
+    // Read from file into kernel space
+    int result = openFile->Read(kernelBuffer, size);
+
+    // Write into user space
+    for(int i = 0; i < result; i++) {
+        bool success = machine->WriteMem(buffer++, 1, (int)kernelBuffer[i]);
+        if(!success) {
+            buffer--; i--;
+        }
+    }
+
+    DEBUG('a', "Read %d bytes from file(%d bytes requested)\nContent: %s\n", size, result, kernelBuffer);
+    delete kernelBuffer;
+    currentThread->RestoreUserState();    
+    machine->WriteRegister(2, result);
+}
+
+void ExecRoutine(int arg) {
+    currentThread->space->InitRegisters();
+    currentThread->space->RestoreState();
+    Machine *p = (Machine *)arg;
+    p->Run();
+}
+
+void ExecSyscallHandler() {
+    currentThread->SaveUserState();
+    // First, get the length of filename
+    int fileNameBase = machine->ReadRegister(4);
+    int value;
+    int length = 0;
+    do {
+        machine->ReadMem(fileNameBase++, 1, &value);
+        length++;
+    } while(value != '\0');
+
+    // Copy filename
+    char *fileName = new char[length];
+    fileNameBase -= length; length--;
+    for(int i = 0; i < length; i++) {
+        machine->ReadMem(fileNameBase++, 1, &value);
+        fileName[i] = char(value);
+    }
+    fileName[length] = '\0';
+    DEBUG('a', "Executable file name: %s\n", fileName);
+
+    OpenFile *executable = fileSystem->Open(fileName);
+
+    if(executable != NULL)
+        DEBUG('a', "Open file %s done\n", fileName);
+    else {
+        DEBUG('a', "Can not open file %s\n", fileName);
+        machine->WriteRegister(2, (int)executable);
+        return;
+    }
+
+    // Create an address space and a new thread
+    AddrSpace *addrSpace = new AddrSpace(executable);
+    Thread *forked = new Thread(fileName);
+    forked->space = addrSpace;
+
+    // Run user program
+    forked->Fork(ExecRoutine, (int)machine);
+    DEBUG('t', "Exec done\n");
+    currentThread->RestoreUserState();
+    machine->WriteRegister(2, (int)addrSpace);
+}
+
+void ForkRoutine(int arg) {
+    currentThread->space->RestoreState();
+    
+    // Set PC to *arg*
+    machine->WriteRegister(PCReg, arg);
+    machine->WriteRegister(NextPCReg, arg + 4);
+    machine->Run();
+}
+
+void ForkSyscallHandler() {
+    currentThread->SaveUserState(); // Save Registers
+    int funcAddr = machine->ReadRegister(4);
+
+    // Create a new thread in the same addrspace
+    Thread *thread = new Thread("forked thread");
+    thread->space = currentThread->space;
+    thread->space->refNum++; // Increase RefNum
+    // thread->RestoreUserState();
+    thread->Fork(ForkRoutine, funcAddr);
+    currentThread->RestoreUserState(); // Save Registers
+}
+
+void YieldSyscallHandler() {
+    currentThread->SaveUserState(); // Save Registers
+    currentThread->Yield();
+    currentThread->RestoreUserState();
+}
+
+void JoinSyscallHandler() {
+    currentThread->SaveUserState();
+    AddrSpace *addrSpace = (AddrSpace *)machine->ReadRegister(4);
+    addrSpace->Wait();
+    DEBUG('a', "Join finished\n");
+    int exitCode = currentThread->joinReturnValue;
+    DEBUG('a', "Get join exit code: %d", exitCode);
+    currentThread->RestoreUserState();
+    machine->WriteRegister(2, exitCode);
+}
+
 void
 ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
 
-    if ((which == SyscallException) && (type == SC_Halt)) {
-	DEBUG('a', "Shutdown, initiated by user program.\n");
-   	interrupt->Halt();
+    if (which == SyscallException) {
+        if (type == SC_Halt) {
+	        DEBUG('a', "Shutdown, initiated by user program.\n");
+           interrupt->Halt();
+        }
+        else if(type == SC_Exit) {
+            DEBUG('a', "Syscall: Exit\n");
+            int exitCode = machine->ReadRegister(4);
+            printf("\nThread %s finished with exit code %d\n\n", currentThread->getName(), exitCode);
+            currentThread->space->refNum--;
+            DEBUG('a', "AddrSpace reference num: %d\n", currentThread->space->refNum);
+            if(currentThread->space->refNum == 0) {
+                currentThread->space->Broadcast(exitCode);
+            }        
+            currentThread->Finish();
+        }
+        else if(type == SC_Create) {
+            DEBUG('a', "Syscall: Create\n");
+            CreateSyscallHandler();
+        }
+        else if(type == SC_Open) {
+            DEBUG('a', "Syscall: Open\n");
+            OpenSyscallHandler();
+        }
+        else if(type == SC_Close) {
+            DEBUG('a', "Syscall: Close\n");
+            CloseSyscallHandler();
+        }
+        else if(type == SC_Write) {
+            DEBUG('a', "Syscall: Write\n");
+            WriteSyscallHandler();
+        }
+        else if(type == SC_Read) {
+            DEBUG('a', "Syscall: Read\n");
+            ReadSyscallHandler();
+        }
+        else if(type == SC_Exec) {
+            DEBUG('a', "Syscall: Exec\n");
+            ExecSyscallHandler();
+        }
+        else if(type == SC_Fork) {
+            DEBUG('a', "Syscall: Fork\n");
+            ForkSyscallHandler();
+        }
+        else if(type == SC_Yield) {
+            DEBUG('a', "Syscall: Yield\n");
+            YieldSyscallHandler();
+        }
+        else if(type == SC_Join) {
+            DEBUG('a', "Syscall: Join\n");
+            JoinSyscallHandler();
+        }
+
+        // Increase PC
+        machine->ReturnFromSyscall();        
     }
     else if(which == PageFaultException) {
 #ifdef USE_TLB
@@ -355,12 +620,6 @@ ExceptionHandler(ExceptionType which)
 #else
         ASSERT(false);
 #endif
-    }
-    else if((which == SyscallException) && (type == SC_Exit)) {
-        int exitCode = machine->ReadRegister(4);
-        printf("\nThread %s finished with exit code %d\n", currentThread->getName(), exitCode);
-        DEBUG('a', "Thread %s finished with exit code %d\n", currentThread->getName(), exitCode);
-        currentThread->Finish();
     }
     else {
 	printf("Unexpected user mode exception %d %d\n", which, type);

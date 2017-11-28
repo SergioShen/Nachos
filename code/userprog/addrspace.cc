@@ -18,6 +18,7 @@
 #include "copyright.h"
 #include "system.h"
 #include "addrspace.h"
+#include "synch.h"
 #ifdef HOST_SPARC
 #include <strings.h>
 #endif
@@ -96,7 +97,10 @@ AddrSpace::AddrSpace(OpenFile *executable)
         pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
         pageTable[i].valid = FALSE;
     }
-#endif
+#endif  
+    lock = (int)new Lock("addrspace lock");
+    condition = (int)new Condition("addrspace condition");
+    refNum = 1;
 }
 
 //----------------------------------------------------------------------
@@ -163,14 +167,16 @@ void AddrSpace::SaveState()
 {
     // Make TLB invalid on a context switch
     for(int i = 0; i < TLBSize; i++) {
+        if(machine->tlb[i].valid) {
 #ifdef USE_INVERTED_TABLE
-        TranslationEntry *next = machine->invertedPageTable[machine->tlb[i].physicalPage].next;
-        machine->invertedPageTable[machine->tlb[i].physicalPage] = machine->tlb[i];
-        machine->invertedPageTable[machine->tlb[i].physicalPage].next = next;
+            TranslationEntry *next = machine->invertedPageTable[machine->tlb[i].physicalPage].next;
+            machine->invertedPageTable[machine->tlb[i].physicalPage] = machine->tlb[i];
+            machine->invertedPageTable[machine->tlb[i].physicalPage].next = next;
 #else
-        machine->pageTable[machine->tlb[i].virtualPage] = machine->tlb[i];
+            machine->pageTable[machine->tlb[i].virtualPage] = machine->tlb[i];
 #endif
-        machine->tlb[i].valid = false;
+            machine->tlb[i].valid = false;
+        }
     }
 }
 
@@ -184,6 +190,17 @@ void AddrSpace::SaveState()
 
 void AddrSpace::RestoreState() 
 {
+#ifndef USE_INVERTED_TABLE
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
+#endif
+}
+
+void AddrSpace::Wait() {
+    ((Lock*)lock)->Acquire();
+    ((Condition*)condition)->Wait((Lock*)lock);
+}
+
+void AddrSpace::Broadcast(int returnValue) {
+    ((Condition*)condition)->BroadcastAndSetReturnValue((Lock*)lock, returnValue);
 }
