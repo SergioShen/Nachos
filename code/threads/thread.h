@@ -120,7 +120,7 @@ class Thread {
         dynamicPrior = 100000000;
       }
     int getThreadID() { return threadID; }
-
+    
   private:
     // some of the private data for this class is listed above
     
@@ -155,6 +155,7 @@ class Thread {
     void RestoreUserState();		// restore user-level register state
 
     AddrSpace *space;			// User code this thread is running.
+    int joinReturnValue;
 #endif
 };
 

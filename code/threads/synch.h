@@ -129,7 +129,8 @@ class Condition {
 					// *atomic* in Wait()
     void Signal(Lock *conditionLock);   // conditionLock must be held by
     void Broadcast(Lock *conditionLock);// the currentThread for all of 
-					// these operations
+          // these operations
+    void BroadcastAndSetReturnValue(Lock *conditionLock, int returnValue);
 
   private:
     char* name;

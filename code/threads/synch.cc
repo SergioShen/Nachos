@@ -178,6 +178,23 @@ void Condition::Broadcast(Lock* conditionLock) {
     (void) interrupt->SetLevel(oldLevel);
 }
 
+void Condition::BroadcastAndSetReturnValue(Lock* conditionLock, int returnValue) {
+    IntStatus oldLevel = interrupt->SetLevel(IntOff);
+    
+    Thread *thread = NULL;
+    while(!queue->IsEmpty()) {
+        thread = (Thread *)queue->Remove();
+        if (thread != NULL) {
+#ifdef USER_PROG
+            thread->joinReturnValue = returnValue;
+#endif
+            scheduler->ReadyToRun(thread);
+        }
+    }
+    
+    (void) interrupt->SetLevel(oldLevel);
+}
+
 Barrier::Barrier(char *debugName, int threadNumber) {
     name = debugName;
     targetNumber = threadNumber;

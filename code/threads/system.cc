@@ -18,6 +18,7 @@ Interrupt *interrupt;			// interrupt status
 Statistics *stats;			// performance metrics
 Timer *timer;				// the hardware timer device,
                     // for invoking context switches
+bool deleting = FALSE; // Prevent deleting a thread twice
 
 #ifdef FILESYS_NEEDED
 FileSystem  *fileSystem;

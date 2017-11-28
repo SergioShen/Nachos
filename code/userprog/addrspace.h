@@ -40,7 +40,11 @@ class AddrSpace {
   
   public:
     OpenFile *executable;
-
+    int lock;
+    int condition;
+    void Wait();
+    void Broadcast(int returnValue);
+    int refNum;
 };
 
 void 

@@ -338,7 +338,7 @@ addrspace.o: ../userprog/addrspace.cc /usr/include/stdc-predef.h \
  ../filesys/filesys.h ../filesys/openfile.h ../bin/noff.h \
  ../threads/scheduler.h ../threads/list.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
- ../userprog/addrspace.h
+ ../userprog/addrspace.h ../threads/synch.h
 bitmap.o: ../userprog/bitmap.cc /usr/include/stdc-predef.h \
  ../threads/copyright.h ../userprog/bitmap.h ../threads/utility.h \
  ../threads/copyright.h ../threads/bool.h ../machine/sysdep.h \

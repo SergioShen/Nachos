@@ -18,6 +18,7 @@
 #include "copyright.h"
 #include "system.h"
 #include "addrspace.h"
+#include "synch.h"
 #ifdef HOST_SPARC
 #include <strings.h>
 #endif
@@ -96,7 +97,10 @@ AddrSpace::AddrSpace(OpenFile *executable)
         pageTable[i].virtualPage = i;	// for now, virtual page # = phys page #
         pageTable[i].valid = FALSE;
     }
-#endif
+#endif  
+    lock = (int)new Lock("addrspace lock");
+    condition = (int)new Condition("addrspace condition");
+    refNum = 1;
 }
 
 //----------------------------------------------------------------------
@@ -190,4 +194,13 @@ void AddrSpace::RestoreState()
     machine->pageTable = pageTable;
     machine->pageTableSize = numPages;
 #endif
+}
+
+void AddrSpace::Wait() {
+    ((Lock*)lock)->Acquire();
+    ((Condition*)condition)->Wait((Lock*)lock);
+}
+
+void AddrSpace::Broadcast(int returnValue) {
+    ((Condition*)condition)->BroadcastAndSetReturnValue((Lock*)lock, returnValue);
 }
